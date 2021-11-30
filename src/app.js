@@ -1,4 +1,5 @@
 const fastify = require('fastify')({ logger: true });
+
 fastify.register(require('fastify-swagger'), {
   exposeRoute: true,
   routePrefix: 'doc',
@@ -7,15 +8,18 @@ fastify.register(require('fastify-swagger'), {
   },
 });
 
+fastify.register(require('./resources/users/user.router'));
+
 const EXIT_CODE = 1;
 
-async function main(port) {
-  try {
-    await fastify.listen(port);
-  } catch(error) {
-    fastify.log.error(error);
-    process.exit(EXIT_CODE);
-  }
+function main(port) {
+  fastify.listen(port, (err, address) => {
+    if (err) {
+      fastify.log.error(err);
+      process.exit(EXIT_CODE);
+    }
+    fastify.log.info(`server listening on ${address}`)
+  });
 }
 
 module.exports = { main };
