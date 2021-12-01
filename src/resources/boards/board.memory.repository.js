@@ -1,4 +1,5 @@
 const { boards } = require('../../db');
+const { deleteBoardTasksFromDb } = require('../tasks/task.memory.repository');
 const Board = require('./board.model');
 
 const getAllFromDb = async () => new Promise((resolve) => {
@@ -23,7 +24,7 @@ const deleteBoardFormDb = async (id) => new Promise((resolve, reject) => {
 
     if (boardIndex !== -1) {
         boards.splice(boardIndex, 1);
-        resolve();
+        deleteBoardTasksFromDb(id).then(resolve);
     } else {
         reject(new Error(`Board with id ${id} not found`));
     }
@@ -39,7 +40,7 @@ const updateBoardFromDb = async (id, payload) => new Promise((resolve, reject) =
     } else {
         reject(new Error(`Board with id ${id} not found`));
     }
-})
+});
 
 module.exports = {
     getAllFromDb,

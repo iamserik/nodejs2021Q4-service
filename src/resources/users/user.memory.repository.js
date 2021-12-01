@@ -1,4 +1,5 @@
 const { users } = require('../../db');
+const { unsetUserTasksFromDb } = require('../tasks/task.memory.repository');
 const User = require('./user.model');
 
 const getAllFromDb = async () => new Promise((resolve) => {
@@ -19,11 +20,11 @@ const addUserToDb = async (payload) => new Promise((resolve) => {
 });
 
 const deleteUserFormDb = async (id) => new Promise((resolve, reject) => {
-    const userIndex = users.findIndex((item) => item.id === id);
+    const userPosition = users.findIndex((item) => item.id === id);
 
-    if (userIndex !== -1) {
-        users.splice(userIndex, 1);
-        resolve();
+    if (userPosition !== -1) {
+        users.splice(userPosition, 1);
+        unsetUserTasksFromDb(id).then(resolve);
     } else {
         reject(new Error(`User with id ${id} not found`));
     }
