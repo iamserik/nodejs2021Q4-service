@@ -31,6 +31,7 @@ const getSingle = async (req, reply) => {
 
 const addUser = async (req, reply) => {
     addUserToDb(req.body).then((data) => {
+        reply.code(201);
         reply.send(data);
     });
 };
