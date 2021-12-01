@@ -15,6 +15,13 @@ const User = {
   },
 };
 
+const notFound = {
+  type: 'object',
+  properties: {
+    message: { type: 'string' },
+  },
+};
+
 const getAllUsersOpts = {
   schema: {
     response: {
@@ -31,7 +38,8 @@ const getSingleUserOpts = {
   schema: {
     response: {
       200: User,
-    }
+      404: notFound,
+    },
   },
   handler: getSingle,
 };
@@ -44,7 +52,7 @@ const postUserOpts = {
     },
     response: {
       201: User,
-    }
+    },
   },
   handler: addUser,
 };
@@ -58,7 +66,8 @@ const deleteUserOpts = {
           message: { type: 'string' },
         },
       },
-    }
+      404: notFound,
+    },
   },
   handler: deleteUser,
 };
@@ -71,7 +80,8 @@ const updateUserOpts = {
     },
     response: {
       200: User,
-    }
+      404: notFound,
+    },
   },
   handler: updateUser,
 };

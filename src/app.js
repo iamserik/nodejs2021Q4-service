@@ -1,4 +1,4 @@
-const fastify = require('fastify')({ logger: true });
+const fastify = require('fastify')();
 
 fastify.register(require('fastify-swagger'), {
   exposeRoute: true,
@@ -9,6 +9,7 @@ fastify.register(require('fastify-swagger'), {
 });
 
 fastify.register(require('./resources/users/user.router'));
+fastify.register(require('./resources/boards/board.router'));
 
 const EXIT_CODE = 1;
 

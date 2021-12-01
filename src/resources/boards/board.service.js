@@ -3,10 +3,10 @@ const { validateId } = require('../../common/utils');
 const {
     getAllFromDb,
     getSingleFromDb,
-    addUserToDb,
-    deleteUserFormDb,
-    updateUserFromDb,
-} = require('./user.memory.repository');
+    addBoardToDb,
+    deleteBoardFormDb,
+    updateBoardFromDb,
+} = require('./board.memory.repository');
 
 const getAll = async (req, reply) => {
     getAllFromDb().then((data) => {
@@ -26,30 +26,30 @@ const getSingle = async (req, reply) => {
     });
 };
 
-const addUser = async (req, reply) => {
-    addUserToDb(req.body).then((data) => {
+const addBoard = async (req, reply) => {
+    addBoardToDb(req.body).then((data) => {
         reply.code(201);
         reply.send(data);
     });
 };
 
-const deleteUser = async (req, reply) => {
+const deleteBoard = async (req, reply) => {
     const { id } = req.params;
     validateId(id);
 
-    deleteUserFormDb(id).then(() => {
-        reply.send({ message: 'User deleted successfully' });
+    deleteBoardFormDb(id).then(() => {
+        reply.send({ message: 'Board deleted successfully' });
     }).catch((err) => {
         reply.code(404);
         reply.send({ message: err.message });
     });
 };
 
-const updateUser = async (req, reply) => {
+const updateBoard = async (req, reply) => {
     const { id } = req.params;
     validateId(id);
 
-    updateUserFromDb(id, req.body).then((data) => {
+    updateBoardFromDb(id, req.body).then((data) => {
         reply.send(data);
     }).catch((err) => {
         reply.code(404);
@@ -60,7 +60,7 @@ const updateUser = async (req, reply) => {
 module.exports = {
     getAll,
     getSingle,
-    addUser,
-    deleteUser,
-    updateUser,
+    addBoard,
+    deleteBoard,
+    updateBoard,
 };
