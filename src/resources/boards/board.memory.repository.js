@@ -24,7 +24,9 @@ const deleteBoardFormDb = async (id) => new Promise((resolve, reject) => {
 
     if (boardIndex !== -1) {
         boards.splice(boardIndex, 1);
-        deleteBoardTasksFromDb(id).then(resolve);
+        deleteBoardTasksFromDb(id).then(() => {
+            resolve();
+        });
     } else {
         reject(new Error(`Board with id ${id} not found`));
     }

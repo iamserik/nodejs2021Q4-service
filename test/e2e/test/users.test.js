@@ -199,8 +199,6 @@ describe('Users suite', () => {
           .expect(200)
           .expect('Content-Type', /json/);
 
-        console.log(newTaskResponse);
-
         expect(newTaskResponse.body).to.be.instanceOf(Object);
         expect(newTaskResponse.body.userId).to.equal(null);
       }

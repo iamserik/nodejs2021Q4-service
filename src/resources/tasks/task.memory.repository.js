@@ -41,8 +41,6 @@ const unsetUserTasksFromDb = async (userId) => new Promise((resolve) => {
         return task;
     });
 
-    console.log('mapped', mapped);
-
     tasks.splice(0, tasks.length, ...mapped);
     resolve();
 })

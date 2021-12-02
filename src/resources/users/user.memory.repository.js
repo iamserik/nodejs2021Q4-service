@@ -24,7 +24,9 @@ const deleteUserFormDb = async (id) => new Promise((resolve, reject) => {
 
     if (userPosition !== -1) {
         users.splice(userPosition, 1);
-        unsetUserTasksFromDb(id).then(resolve);
+        unsetUserTasksFromDb(id).then(() => {
+            resolve();
+        });
     } else {
         reject(new Error(`User with id ${id} not found`));
     }
