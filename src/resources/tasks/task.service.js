@@ -30,7 +30,8 @@ const getSingle = async (req, reply) => {
 };
 
 const addTask = async (req, reply) => {
-    addTaskToDb(req.body).then((data) => {
+    const { boardId } = req.params;
+    addTaskToDb({ ...req.body, boardId }).then((data) => {
         reply.code(201);
         reply.send(data);
     });
