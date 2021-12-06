@@ -1,4 +1,4 @@
 const { PORT } = require('./common/config');
-const { main } = require('./app');
+const { main: app } = require('./app.ts');
 
-main(PORT);
+app(PORT);

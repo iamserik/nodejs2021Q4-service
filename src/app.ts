@@ -1,4 +1,4 @@
-const fastify = require('fastify')({ logger: true, http2: false });
+const fastify = require('fastify')({ logger: true });
 
 fastify.register(require('fastify-swagger'), {
   exposeRoute: true,
@@ -14,8 +14,8 @@ fastify.register(require('./resources/tasks/task.router'));
 
 const EXIT_CODE = 1;
 
-function main(port) {
-  fastify.listen(port, (err) => {
+function main(port: string | number): void {
+  fastify.listen(port, (err: Error | null) => {
     if (err) {
       fastify.log.error(err);
       process.exit(EXIT_CODE);
