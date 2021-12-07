@@ -8,7 +8,7 @@ module.exports = {
     output: {
         filename: "bundle.js",
         path: path.resolve(__dirname, 'dist'),
-        clean: true
+        clean: true,
     },
     module: {
         rules: [
@@ -16,7 +16,11 @@ module.exports = {
                 test: /\.[tj]s$/,
                 use: "ts-loader",
                 include: [path.resolve(__dirname, "src")]
-            }
-        ]
-    }
+            },
+        ],
+    },
+    resolve: {
+        extensions: ['.ts', '.js'],
+    },
+    externals: ['pino-pretty', 'long'],
 }

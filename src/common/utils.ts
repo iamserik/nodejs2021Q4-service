@@ -1,4 +1,4 @@
-const { validate: uuidValidate } = require("uuid");
+import { validate as uuidValidate } from "uuid";
 
 export const validateId = (id: string): void => {
     const valid = uuidValidate(id);

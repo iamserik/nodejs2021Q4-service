@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 import { Task } from '../../interfaces/Task';
 
 export class TaskModel implements Task{
