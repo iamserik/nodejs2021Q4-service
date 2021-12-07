@@ -1,10 +1,11 @@
-const {
+import { FastifyInstance, RouteOptions } from 'fastify';
+import {
     getAll,
     getSingle,
     addTask,
     deleteTask,
     updateTask,
-} = require('./task.service');
+} from './task.service';
 
 const Task = {
     type: 'object',
@@ -90,7 +91,7 @@ const updateTaskOpts = {
     handler: updateTask,
 };
 
-function tasksRoute(fastify, options, done) {
+export default function tasksRoute(fastify: FastifyInstance, options: RouteOptions, done: () => void) {
     fastify.get('/boards/:boardId/tasks', getAllTasksOpts);
 
     fastify.get('/boards/:boardId/tasks/:taskId', getSingleTaskOpts);
@@ -103,5 +104,3 @@ function tasksRoute(fastify, options, done) {
 
     done();
 }
-
-module.exports = tasksRoute;

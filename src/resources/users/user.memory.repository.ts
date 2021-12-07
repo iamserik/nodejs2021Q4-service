@@ -1,25 +1,27 @@
-const { users } = require('../../db');
-const { unsetUserTasksFromDb } = require('../tasks/task.memory.repository');
-const User = require('./user.model');
+import { UserModel } from "./user.model";
+import { users } from "../../db/users";
+import { User } from "../../interfaces/User";
 
-const getAllFromDb = async () => new Promise((resolve) => {
+const { unsetUserTasksFromDb } = require('../tasks/task.memory.repository');
+
+export const getAllFromDb = async (): Promise<Array<UserModel>> => new Promise((resolve) => {
     resolve(users);
 });
 
-const getSingleFromDb = async (id) => new Promise((resolve, reject) => {
+export const getSingleFromDb = async (id: string): Promise<UserModel> => new Promise((resolve, reject) => {
     const user = users.find((item) => item.id === id);
 
     if (user) resolve(user);
     else reject(new Error(`User with id ${id} not found`));
 });
 
-const addUserToDb = async (payload) => new Promise((resolve) => {
-    const user = new User(payload);
+export const addUserToDb = async (payload: User): Promise<UserModel> => new Promise((resolve) => {
+    const user = new UserModel(payload);
     users.push(user);
     resolve(user);
 });
 
-const deleteUserFormDb = async (id) => new Promise((resolve, reject) => {
+export const deleteUserFormDb = async (id: string): Promise<void> => new Promise((resolve, reject) => {
     const userPosition = users.findIndex((item) => item.id === id);
 
     if (userPosition !== -1) {
@@ -32,22 +34,14 @@ const deleteUserFormDb = async (id) => new Promise((resolve, reject) => {
     }
 });
 
-const updateUserFromDb = async (id, payload) => new Promise((resolve, reject) => {
+export const updateUserFromDb = async (id: string, payload: User): Promise<UserModel> => new Promise((resolve, reject) => {
     const userIndex = users.findIndex((item) => item.id === id);
 
     if (userIndex !== -1) {
-        const user = new User({ ...payload, id });
+        const user = new UserModel({ ...payload, id });
         users.splice(userIndex, 1, user);
         resolve(user);
     } else {
         reject(new Error(`User with id ${id} not found`));
     }
-})
-
-module.exports = {
-    getAllFromDb,
-    getSingleFromDb,
-    addUserToDb,
-    deleteUserFormDb,
-    updateUserFromDb,
-};
+});

@@ -1,10 +1,11 @@
-const {
+import { FastifyInstance, RouteOptions } from 'fastify';
+import {
     getAll,
     getSingle,
     addBoard,
     deleteBoard,
     updateBoard,
-} = require('./board.service');
+} from './board.service';
 
 const Column = {
     type: 'object',
@@ -97,7 +98,7 @@ const updateBoardOpts = {
     handler: updateBoard,
 };
 
-function boardsRoute(fastify, options, done) {
+export default function boardsRoute(fastify: FastifyInstance, options: RouteOptions, done: () => void) {
     fastify.get('/boards', getAllBoardsOpts);
 
     fastify.get('/boards/:id', getSingleBoardOpts);
@@ -110,5 +111,3 @@ function boardsRoute(fastify, options, done) {
 
     done();
 }
-
-module.exports = boardsRoute;

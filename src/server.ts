@@ -1,4 +1,8 @@
-const { PORT } = require('./common/config');
-const { main: app } = require('./app.ts');
+import config from './common/config';
+import app from './app';
 
-app(PORT);
+console.log('config', config);
+
+const port = config.PORT || 4000;
+
+app(port);

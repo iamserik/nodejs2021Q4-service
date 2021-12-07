@@ -1,3 +1,5 @@
+import { FastifyInstance, RouteOptions } from 'fastify';
+
 const {
   getAll,
   getSingle,
@@ -86,7 +88,7 @@ const updateUserOpts = {
   handler: updateUser,
 };
 
-function usersRoute(fastify, options, done) {
+export default function usersRoute(fastify: FastifyInstance, options: RouteOptions, done: () => void) {
   fastify.get('/users', getAllUsersOpts);
 
   fastify.get('/users/:id', getSingleUserOpts);
@@ -99,5 +101,3 @@ function usersRoute(fastify, options, done) {
 
   done();
 }
-
-module.exports = usersRoute;

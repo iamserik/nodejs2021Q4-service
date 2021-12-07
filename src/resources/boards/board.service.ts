@@ -1,20 +1,38 @@
-const { validateId } = require('../../common/utils');
-
-const {
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { validateId } from '../../common/utils';
+import { Board } from '../../interfaces/Board';
+import {
     getAllFromDb,
     getSingleFromDb,
     addBoardToDb,
     deleteBoardFormDb,
     updateBoardFromDb,
-} = require('./board.memory.repository');
+} from './board.memory.repository';
 
-const getAll = async (req, reply) => {
+type BoardRequest = FastifyRequest<{
+    Body: Board,
+}>;
+
+type BoardRequestById = FastifyRequest<{
+    Params: {
+        id: string,
+    }
+}>;
+
+type BoardRequestUpdate = FastifyRequest<{
+    Body: Board,
+    Params: {
+        id: string,
+    }
+}>
+
+export const getAll = async (_: FastifyRequest, reply: FastifyReply) => {
     getAllFromDb().then((data) => {
         reply.send(data);
     });
 };
 
-const getSingle = async (req, reply) => {
+export const getSingle = async (req: BoardRequestById, reply: FastifyReply) => {
     const { id } = req.params;
     validateId(id);
 
@@ -26,14 +44,14 @@ const getSingle = async (req, reply) => {
     });
 };
 
-const addBoard = async (req, reply) => {
+export const addBoard = async (req: BoardRequest, reply: FastifyReply) => {
     addBoardToDb(req.body).then((data) => {
         reply.code(201);
         reply.send(data);
     });
 };
 
-const deleteBoard = async (req, reply) => {
+export const deleteBoard = async (req: BoardRequestById, reply: FastifyReply) => {
     const { id } = req.params;
     validateId(id);
 
@@ -45,7 +63,7 @@ const deleteBoard = async (req, reply) => {
     });
 };
 
-const updateBoard = async (req, reply) => {
+export const updateBoard = async (req: BoardRequestUpdate, reply: FastifyReply) => {
     const { id } = req.params;
     validateId(id);
 
@@ -55,12 +73,4 @@ const updateBoard = async (req, reply) => {
         reply.code(404);
         reply.send({ message: err.message });
     });
-}
-
-module.exports = {
-    getAll,
-    getSingle,
-    addBoard,
-    deleteBoard,
-    updateBoard,
 };

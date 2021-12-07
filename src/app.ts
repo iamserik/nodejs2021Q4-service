@@ -1,4 +1,6 @@
-const fastify = require('fastify')({ logger: true });
+import Fastify from "fastify";
+
+const fastify = Fastify({ logger: true });
 
 fastify.register(require('fastify-swagger'), {
   exposeRoute: true,
@@ -14,7 +16,7 @@ fastify.register(require('./resources/tasks/task.router'));
 
 const EXIT_CODE = 1;
 
-function main(port: string | number): void {
+export default function main(port: string | number): void {
   fastify.listen(port, (err: Error | null) => {
     if (err) {
       fastify.log.error(err);
@@ -22,5 +24,3 @@ function main(port: string | number): void {
     }
   })
 }
-
-module.exports = { main };

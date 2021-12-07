@@ -1,24 +1,25 @@
-const { tasks } = require('../../db');
-const Task = require('./task.model');
+import { tasks } from '../../db/tasks';
+import { TaskModel } from './task.model';
+import { Task } from '../../interfaces/Task';
 
-const getAllFromDb = async (boardId) => new Promise((resolve) => {
+export const getAllFromDb = async (boardId: string): Promise<Array<TaskModel>> => new Promise((resolve) => {
     resolve(tasks.filter((task) => task.boardId === boardId));
 });
 
-const getSingleFromDb = async (id) => new Promise((resolve, reject) => {
+export const getSingleFromDb = async (id: string): Promise<TaskModel> => new Promise((resolve, reject) => {
     const task = tasks.find((item) => item.id === id);
 
     if (task) resolve(task);
     else reject(new Error(`Task with id ${id} not found`));
 });
 
-const addTaskToDb = async (payload) => new Promise((resolve) => {
-    const task = new Task(payload);
+export const addTaskToDb = async (payload: Task): Promise<TaskModel> => new Promise((resolve) => {
+    const task = new TaskModel(payload);
     tasks.push(task);
     resolve(task);
 });
 
-const deleteTaskFormDb = async (id) => new Promise((resolve, reject) => {
+export const deleteTaskFormDb = async (id: string): Promise<void> => new Promise((resolve, reject) => {
     const taskIndex = tasks.findIndex((item) => item.id === id);
 
     if (taskIndex !== -1) {
@@ -29,13 +30,13 @@ const deleteTaskFormDb = async (id) => new Promise((resolve, reject) => {
     }
 });
 
-const deleteBoardTasksFromDb = async (boardId) => new Promise((resolve) => {
+export const deleteBoardTasksFromDb = async (boardId: string): Promise<void> => new Promise((resolve) => {
     const cleanedTasks = tasks.filter((task) => task.boardId !== boardId);
     tasks.splice(0, tasks.length, ...cleanedTasks);
     resolve();
 });
 
-const unsetUserTasksFromDb = async (userId) => new Promise((resolve) => {
+export const unsetUserTasksFromDb = async (userId: string): Promise<void> => new Promise((resolve) => {
     const mapped = tasks.map((task) => {
         if (task.userId === userId) return { ...task, userId: null };
         return task;
@@ -45,24 +46,14 @@ const unsetUserTasksFromDb = async (userId) => new Promise((resolve) => {
     resolve();
 })
 
-const updateTaskFromDb = async (id, payload) => new Promise((resolve, reject) => {
+export const updateTaskFromDb = async (id: string, payload: Task): Promise<TaskModel> => new Promise((resolve, reject) => {
     const taskIndex = tasks.findIndex((item) => item.id === id);
 
     if (taskIndex !== -1) {
-        const task = new Task({ ...payload, id });
+        const task = new TaskModel({ ...payload, id });
         tasks.splice(taskIndex, 1, task);
         resolve(task);
     } else {
         reject(new Error(`Task with id ${id} not found`));
     }
 });
-
-module.exports = {
-    getAllFromDb,
-    getSingleFromDb,
-    addTaskToDb,
-    deleteTaskFormDb,
-    updateTaskFromDb,
-    deleteBoardTasksFromDb,
-    unsetUserTasksFromDb,
-};
