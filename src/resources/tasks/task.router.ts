@@ -100,7 +100,7 @@ const updateTaskOpts = {
  *
  * @return {void}
  */
-export default function tasksRoute(fastify: FastifyInstance, options: RouteOptions, done: () => void) {
+export default function tasksRoute(fastify: FastifyInstance, options: RouteOptions, done: () => void): void {
     fastify.get('/boards/:boardId/tasks', getAllTasksOpts);
 
     fastify.get('/boards/:boardId/tasks/:taskId', getSingleTaskOpts);

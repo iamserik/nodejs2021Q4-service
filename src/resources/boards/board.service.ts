@@ -18,7 +18,7 @@ import {
  *
  * @return {void}
  */
-export const getAll = async (_: FastifyRequest, reply: FastifyReply) => {
+export const getAll = async (_: FastifyRequest, reply: FastifyReply): Promise<void> => {
     getAllFromDb().then((data) => {
         reply.send(data);
     });
@@ -33,7 +33,7 @@ export const getAll = async (_: FastifyRequest, reply: FastifyReply) => {
  * @return {void}
  * @throws {Error} if not valid uuid
  */
-export const getSingle = async (req: RequestById, reply: FastifyReply) => {
+export const getSingle = async (req: RequestById, reply: FastifyReply): Promise<void> => {
     const { id } = req.params;
     validateId(id);
 
@@ -53,7 +53,7 @@ export const getSingle = async (req: RequestById, reply: FastifyReply) => {
  *
  * @return {void}
  */
-export const addBoard = async (req: BoardRequest, reply: FastifyReply) => {
+export const addBoard = async (req: BoardRequest, reply: FastifyReply): Promise<void> => {
     addBoardToDb(req.body).then((data) => {
         reply.code(201);
         reply.send(data);
@@ -69,7 +69,7 @@ export const addBoard = async (req: BoardRequest, reply: FastifyReply) => {
  * @return {void}
  * @throws {Error} if not valid uuid
  */
-export const deleteBoard = async (req: RequestById, reply: FastifyReply) => {
+export const deleteBoard = async (req: RequestById, reply: FastifyReply): Promise<void> => {
     const { id } = req.params;
     validateId(id);
 
@@ -90,7 +90,7 @@ export const deleteBoard = async (req: RequestById, reply: FastifyReply) => {
  * @return {void}
  * @throws {Error} if not valid uuid
  */
-export const updateBoard = async (req: BoardUpdateRequest, reply: FastifyReply) => {
+export const updateBoard = async (req: BoardUpdateRequest, reply: FastifyReply): Promise<void> => {
     const { id } = req.params;
     validateId(id);
 

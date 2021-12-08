@@ -97,7 +97,7 @@ const updateUserOpts = {
  *
  * @return {void}
  */
-export default function usersRoute(fastify: FastifyInstance, options: RouteOptions, done: () => void) {
+export default function usersRoute(fastify: FastifyInstance, options: RouteOptions, done: () => void): void {
   fastify.get('/users', getAllUsersOpts);
 
   fastify.get('/users/:id', getSingleUserOpts);
