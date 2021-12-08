@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { validateId } from '../../common/utils';
-import { Board } from '../../interfaces/Board';
+import { RequestById } from '../../interfaces/Common';
+import { BoardRequest, BoardUpdateRequest } from '../../interfaces/Board';
 import {
     getAllFromDb,
     getSingleFromDb,
@@ -9,30 +10,31 @@ import {
     updateBoardFromDb,
 } from './board.memory.repository';
 
-type BoardRequest = FastifyRequest<{
-    Body: Board,
-}>;
-
-type BoardRequestById = FastifyRequest<{
-    Params: {
-        id: string,
-    }
-}>;
-
-type BoardRequestUpdate = FastifyRequest<{
-    Body: Board,
-    Params: {
-        id: string,
-    }
-}>
-
+/**
+ * All board records request handler
+ *
+ * @param {FastifyRequest} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ */
 export const getAll = async (_: FastifyRequest, reply: FastifyReply) => {
     getAllFromDb().then((data) => {
         reply.send(data);
     });
 };
 
-export const getSingle = async (req: BoardRequestById, reply: FastifyReply) => {
+
+/**
+ * Single board request handler
+ *
+ * @param {RequestById} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ * @throws {Error} if not valid uuid
+ */
+export const getSingle = async (req: RequestById, reply: FastifyReply) => {
     const { id } = req.params;
     validateId(id);
 
@@ -44,6 +46,14 @@ export const getSingle = async (req: BoardRequestById, reply: FastifyReply) => {
     });
 };
 
+/**
+ * Add board request handler
+ *
+ * @param {BoardRequest} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ */
 export const addBoard = async (req: BoardRequest, reply: FastifyReply) => {
     addBoardToDb(req.body).then((data) => {
         reply.code(201);
@@ -51,7 +61,16 @@ export const addBoard = async (req: BoardRequest, reply: FastifyReply) => {
     });
 };
 
-export const deleteBoard = async (req: BoardRequestById, reply: FastifyReply) => {
+/**
+ * Delete board request handler
+ *
+ * @param {RequestById} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ * @throws {Error} if not valid uuid
+ */
+export const deleteBoard = async (req: RequestById, reply: FastifyReply) => {
     const { id } = req.params;
     validateId(id);
 
@@ -63,7 +82,16 @@ export const deleteBoard = async (req: BoardRequestById, reply: FastifyReply) =>
     });
 };
 
-export const updateBoard = async (req: BoardRequestUpdate, reply: FastifyReply) => {
+/**
+ * Update board request handler
+ *
+ * @param {BoardUpdateRequest} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ * @throws {Error} if not valid uuid
+ */
+export const updateBoard = async (req: BoardUpdateRequest, reply: FastifyReply) => {
     const { id } = req.params;
     validateId(id);
 

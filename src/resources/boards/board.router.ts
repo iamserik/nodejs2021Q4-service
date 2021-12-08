@@ -98,7 +98,16 @@ const updateBoardOpts = {
     handler: updateBoard,
 };
 
-export default function boardsRoute(fastify: FastifyInstance, options: RouteOptions, done: () => void) {
+/**
+ * Board route plugin
+ *
+ * @param {FastifyInstance} fastify
+ * @param {RouteOptions} options
+ * @callback done callback function
+ *
+ * @return {void}
+ */
+export default function boardsRoute(fastify: FastifyInstance, options: RouteOptions, done: () => void): void {
     fastify.get('/boards', getAllBoardsOpts);
 
     fastify.get('/boards/:id', getSingleBoardOpts);
