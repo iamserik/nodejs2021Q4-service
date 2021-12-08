@@ -1,21 +1,34 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Task } from '../../interfaces/Task';
 
+/** @implements {Task} */
 export class TaskModel implements Task{
-    id: string | undefined;
+    /** @type {string} */
+    id: string;
 
+    /** @type {string} */
     title: string;
 
+    /** @type {number} */
     order: number;
 
+    /** @type {string} */
     description: string;
 
+    /** @type {string | null} */
     userId: string | null;
 
+    /** @type {string} */
     boardId: string;
 
+    /** @type {string | null} */
     columnId: string | null;
 
+    /**
+     * Task model class
+     *
+     * @param {Task} task object
+     */
     constructor(task: Task) {
         this.id = task.id ? task.id : uuidv4();
         this.title = task.title;

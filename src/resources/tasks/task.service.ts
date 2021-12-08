@@ -1,6 +1,12 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { validateId } from '../../common/utils';
-import { Task } from '../../interfaces/Task';
+import {
+    RequestByBoardId,
+    RequestByTaskId,
+    RequestCreatTask,
+    RequestUpdateTask,
+} from '../../interfaces/Task';
+
 import {
     getAllFromDb,
     getSingleFromDb,
@@ -9,32 +15,14 @@ import {
     updateTaskFromDb,
 } from './task.memory.repository';
 
-type RequestByBoardId = FastifyRequest<{
-    Params: {
-        boardId: string,
-    },
-}>;
-
-type RequestByTaskId = FastifyRequest<{
-    Params: {
-        taskId: string,
-    },
-}>;
-
-type RequestCreatTask = FastifyRequest<{
-    Params: {
-        boardId: string,
-    },
-    Body: Task,
-}>;
-
-type RequestUpdateTask = FastifyRequest<{
-    Params: {
-        taskId: string,
-    },
-    Body: Task,
-}>;
-
+/**
+ * All task records request handler
+ *
+ * @param {RequestByBoardId} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ */
 export const getAll = async (req: RequestByBoardId, reply: FastifyReply) => {
     const { boardId } = req.params;
     validateId(boardId);
@@ -44,6 +32,15 @@ export const getAll = async (req: RequestByBoardId, reply: FastifyReply) => {
     });
 };
 
+/**
+ * Single task request handler
+ *
+ * @param {RequestByTaskId} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ * @throws {Error} if not valid uuid
+ */
 export const getSingle = async (req: RequestByTaskId, reply: FastifyReply) => {
     const { taskId } = req.params;
     validateId(taskId);
@@ -56,6 +53,14 @@ export const getSingle = async (req: RequestByTaskId, reply: FastifyReply) => {
     });
 };
 
+/**
+ * Add task request handler
+ *
+ * @param {RequestCreatTask} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ */
 export const addTask = async (req: RequestCreatTask, reply: FastifyReply) => {
     const { boardId } = req.params;
     addTaskToDb({ ...req.body, boardId }).then((data) => {
@@ -64,6 +69,15 @@ export const addTask = async (req: RequestCreatTask, reply: FastifyReply) => {
     });
 };
 
+/**
+ * Delete task request handler
+ *
+ * @param {RequestByTaskId} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ * @throws {Error} if not valid uuid
+ */
 export const deleteTask = async (req: RequestByTaskId, reply: FastifyReply) => {
     const { taskId } = req.params;
     validateId(taskId);
@@ -76,6 +90,15 @@ export const deleteTask = async (req: RequestByTaskId, reply: FastifyReply) => {
     });
 };
 
+/**
+ * Update task request handler
+ *
+ * @param {RequestUpdateTask} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ * @throws {Error} if not valid uuid
+ */
 export const updateTask = async (req: RequestUpdateTask, reply: FastifyReply) => {
     const { taskId } = req.params;
     validateId(taskId);
