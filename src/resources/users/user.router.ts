@@ -88,6 +88,15 @@ const updateUserOpts = {
   handler: updateUser,
 };
 
+/**
+ * User route plugin
+ *
+ * @param {FastifyInstance} fastify
+ * @param {RouteOptions} options
+ * @callback done callback function
+ *
+ * @return {void}
+ */
 export default function usersRoute(fastify: FastifyInstance, options: RouteOptions, done: () => void) {
   fastify.get('/users', getAllUsersOpts);
 

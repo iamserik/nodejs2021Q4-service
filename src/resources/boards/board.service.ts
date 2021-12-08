@@ -24,7 +24,6 @@ export const getAll = async (_: FastifyRequest, reply: FastifyReply) => {
     });
 };
 
-
 /**
  * Single board request handler
  *

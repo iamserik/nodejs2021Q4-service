@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { validateId } from '../../common/utils';
-import { User } from '../../interfaces/User';
+import { RequestById } from '../../interfaces/Common';
+import { UserRequest, UserRequestUpdate } from '../../interfaces/User';
 import {
     getAllFromDb,
     getSingleFromDb,
@@ -9,30 +10,30 @@ import {
     updateUserFromDb,
 } from './user.memory.repository';
 
-type UserRequest = FastifyRequest<{
-    Body: User,
-}>;
-
-type UserRequestById = FastifyRequest<{
-    Params: {
-        id: string,
-    },
-}>;
-
-type UserRequestUpdate = FastifyRequest<{
-    Body: User,
-    Params: {
-        id: string,
-    }
-}>
-
-const getAll = async (_: FastifyRequest, reply: FastifyReply) => {
+/**
+ * All users records request handler
+ *
+ * @param {FastifyRequest} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ */
+export const getAll = async (_: FastifyRequest, reply: FastifyReply) => {
     getAllFromDb().then((data) => {
         reply.send(data);
     });
 };
 
-const getSingle = async (req: UserRequestById, reply: FastifyReply) => {
+/**
+ * Single user request handler
+ *
+ * @param {RequestById} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ * @throws {Error} if not valid uuid
+ */
+export const getSingle = async (req: RequestById, reply: FastifyReply) => {
     const { id } = req.params;
     validateId(id);
 
@@ -44,14 +45,31 @@ const getSingle = async (req: UserRequestById, reply: FastifyReply) => {
     });
 };
 
-const addUser = async (req: UserRequest, reply: FastifyReply) => {
+/**
+ * Add user request handler
+ *
+ * @param {UserRequest} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ */
+export const addUser = async (req: UserRequest, reply: FastifyReply) => {
     addUserToDb(req.body).then((data) => {
         reply.code(201);
         reply.send(data);
     });
 };
 
-const deleteUser = async (req: UserRequestById, reply: FastifyReply) => {
+/**
+ * Delete user request handler
+ *
+ * @param {RequestById} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ * @throws {Error} if not valid uuid
+ */
+export const deleteUser = async (req: RequestById, reply: FastifyReply) => {
     const { id } = req.params;
     validateId(id);
 
@@ -63,7 +81,16 @@ const deleteUser = async (req: UserRequestById, reply: FastifyReply) => {
     });
 };
 
-const updateUser = async (req: UserRequestUpdate, reply: FastifyReply) => {
+/**
+ * Update user request handler
+ *
+ * @param {UserRequestUpdate} request
+ * @param {FastifyReply} response
+ *
+ * @return {void}
+ * @throws {Error} if not valid uuid
+ */
+export const updateUser = async (req: UserRequestUpdate, reply: FastifyReply) => {
     const { id } = req.params;
     validateId(id);
 
@@ -74,11 +101,3 @@ const updateUser = async (req: UserRequestUpdate, reply: FastifyReply) => {
         reply.send({ message: err.message });
     });
 }
-
-module.exports = {
-    getAll,
-    getSingle,
-    addUser,
-    deleteUser,
-    updateUser,
-};
