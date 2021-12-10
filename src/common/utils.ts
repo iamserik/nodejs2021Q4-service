@@ -1,4 +1,4 @@
-import { validate as uuidValidate } from "uuid";
+import { validate as uuidValidate } from 'uuid';
 
 /**
  * Validate uuid

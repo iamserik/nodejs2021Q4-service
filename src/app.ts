@@ -1,4 +1,4 @@
-import Fastify from "fastify";
+import Fastify from 'fastify';
 import config from './common/config';
 
 const fastify = Fastify({ logger: true });
@@ -27,5 +27,5 @@ export default function main(port: string | number): void {
       fastify.log.error(err);
       process.exit(config.EXIT_CODE);
     }
-  })
+  });
 }

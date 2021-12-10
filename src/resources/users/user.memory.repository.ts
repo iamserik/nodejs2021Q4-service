@@ -64,14 +64,16 @@ export const deleteUserFormDb = async (id: string): Promise<void> => new Promise
  * @param {User} payload user object with new data
  * @return {UserModel} updated user
  */
-export const updateUserFromDb = async (id: string, payload: User): Promise<UserModel> => new Promise((resolve, reject) => {
-    const userIndex = users.findIndex((item) => item.id === id);
+export const updateUserFromDb = async (id: string, payload: User): Promise<UserModel> => {
+    return new Promise((resolve, reject) => {
+        const userIndex = users.findIndex((item) => item.id === id);
 
-    if (userIndex !== -1) {
-        const user = new UserModel({ ...payload, id });
-        users.splice(userIndex, 1, user);
-        resolve(user);
-    } else {
-        reject(new Error(`User with id ${id} not found`));
-    }
-});
+        if (userIndex !== -1) {
+            const user = new UserModel({ ...payload, id });
+            users.splice(userIndex, 1, user);
+            resolve(user);
+        } else {
+            reject(new Error(`User with id ${id} not found`));
+        }
+    });
+};

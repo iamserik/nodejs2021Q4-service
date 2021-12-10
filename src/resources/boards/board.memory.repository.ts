@@ -63,14 +63,16 @@ export const deleteBoardFormDb = async (id: string): Promise<void> => new Promis
  * @param {Board} payload board object with new data
  * @return {BoardModel} updated board
  */
-export const updateBoardFromDb = async (id: string, payload: Board): Promise<BoardModel> => new Promise((resolve, reject) => {
-    const boardIndex = boards.findIndex((item) => item.id === id);
+export const updateBoardFromDb = async (id: string, payload: Board): Promise<BoardModel> => {
+    return new Promise((resolve, reject) => {
+        const boardIndex = boards.findIndex((item) => item.id === id);
 
-    if (boardIndex !== -1) {
-        const board = new BoardModel({ ...payload, id });
-        boards.splice(boardIndex, 1, board);
-        resolve(board);
-    } else {
-        reject(new Error(`Board with id ${id} not found`));
-    }
-});
+        if (boardIndex !== -1) {
+            const board = new BoardModel({...payload, id});
+            boards.splice(boardIndex, 1, board);
+            resolve(board);
+        } else {
+            reject(new Error(`Board with id ${id} not found`));
+        }
+    });
+};

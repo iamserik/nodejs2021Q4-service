@@ -88,14 +88,16 @@ export const unsetUserTasksFromDb = async (userId: string): Promise<void> => new
  * @param {Task} payload task object with new data
  * @return {TaskModel} updated task
  */
-export const updateTaskFromDb = async (id: string, payload: Task): Promise<TaskModel> => new Promise((resolve, reject) => {
-    const taskIndex = tasks.findIndex((item) => item.id === id);
+export const updateTaskFromDb = async (id: string, payload: Task): Promise<TaskModel> => {
+    return new Promise((resolve, reject) => {
+        const taskIndex = tasks.findIndex((item) => item.id === id);
 
-    if (taskIndex !== -1) {
-        const task = new TaskModel({ ...payload, id });
-        tasks.splice(taskIndex, 1, task);
-        resolve(task);
-    } else {
-        reject(new Error(`Task with id ${id} not found`));
-    }
-});
+        if (taskIndex !== -1) {
+            const task = new TaskModel({...payload, id});
+            tasks.splice(taskIndex, 1, task);
+            resolve(task);
+        } else {
+            reject(new Error(`Task with id ${id} not found`));
+        }
+    });
+};
