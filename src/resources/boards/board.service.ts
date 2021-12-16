@@ -11,24 +11,24 @@ import {
 } from './board.memory.repository';
 
 /**
- * All board records request handler
+ * Reply all board records.
  *
- * @param {FastifyRequest} request
- * @param {FastifyReply} response
+ * @param req - Fastify request
+ * @param reply - Fastify response
  *
  * @return {void}
  */
-export const getAll = async (_: FastifyRequest, reply: FastifyReply): Promise<void> => {
+export const getAll = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
     getAllFromDb().then((data) => {
         reply.send(data);
     });
 };
 
 /**
- * Single board request handler
+ * Reply board by id.
  *
- * @param {RequestById} request
- * @param {FastifyReply} response
+ * @param req - Fastify request. That contains id of board
+ * @param reply - Fastify response.
  *
  * @return {void}
  * @throws {Error} if not valid uuid
@@ -46,10 +46,10 @@ export const getSingle = async (req: RequestById, reply: FastifyReply): Promise<
 };
 
 /**
- * Add board request handler
+ * Add and reply newly created board with status code 201.
  *
- * @param {BoardRequest} request
- * @param {FastifyReply} response
+ * @param req - Fastify request. Contains board data.
+ * @param reply - Fastify response.
  *
  * @return {void}
  */
@@ -61,13 +61,13 @@ export const addBoard = async (req: BoardRequest, reply: FastifyReply): Promise<
 };
 
 /**
- * Delete board request handler
+ * Deletes board by id. Reply success message.
  *
- * @param {RequestById} request
- * @param {FastifyReply} response
+ * @param req - Fastify request.
+ * @param reply - Fastify response
  *
  * @return {void}
- * @throws {Error} if not valid uuid
+ * @throws Error - if not valid uuid
  */
 export const deleteBoard = async (req: RequestById, reply: FastifyReply): Promise<void> => {
     const { id } = req.params;
@@ -82,10 +82,10 @@ export const deleteBoard = async (req: RequestById, reply: FastifyReply): Promis
 };
 
 /**
- * Update board request handler
+ * Update board by id. Reply updated board record.
  *
- * @param {BoardUpdateRequest} request
- * @param {FastifyReply} response
+ * @param req - Fastify request.
+ * @param reply - Fastify response
  *
  * @return {void}
  * @throws {Error} if not valid uuid

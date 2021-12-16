@@ -4,19 +4,20 @@ import { BoardModel } from './board.model';
 import { Board } from '../../interfaces/Board';
 
 /**
- * Retrieves all boards from db
+ * Return all boards from db.
  *
- * @return {Array<BoardModel>} array of boards
+ * @return boards - array of boards
  */
 export const getAllFromDb = async (): Promise<Array<BoardModel>> => new Promise((resolve) => {
     resolve(boards);
 });
 
 /**
- * Retrieve board by id from db
+ * Return board by id from db
  *
- * @param {string} id (uuid)
- * @return {BoardModel} board
+ * @param id - target board's uuid
+ *
+ * @return board - object.
  */
 export const getSingleFromDb = async (id: string): Promise<BoardModel> => new Promise((resolve, reject) => {
     const board = boards.find((item) => item.id === id);
@@ -28,8 +29,9 @@ export const getSingleFromDb = async (id: string): Promise<BoardModel> => new Pr
 /**
  * Create and return new board
  *
- * @param {Board} payload board object
- * @return {BoardModel} new board
+ * @param payload - board object without id.
+ *
+ * @return board - newly created board record
  */
 export const addBoardToDb = async (payload: Board): Promise<BoardModel> => new Promise((resolve) => {
     const board = new BoardModel(payload);
@@ -40,7 +42,8 @@ export const addBoardToDb = async (payload: Board): Promise<BoardModel> => new P
 /**
  * Delete board by id from db
  *
- * @param {string} id (uuid)
+ * @param id - target board's uuid
+ *
  * @return {void}
  */
 export const deleteBoardFormDb = async (id: string): Promise<void> => new Promise((resolve, reject) => {
@@ -57,11 +60,12 @@ export const deleteBoardFormDb = async (id: string): Promise<void> => new Promis
 });
 
 /**
- * Update existing board
+ * Update and return existing board from db
  *
- * @param {string} id
- * @param {Board} payload board object with new data
- * @return {BoardModel} updated board
+ * @param id - target board's uuid
+ * @param payload - board object data without id
+ *
+ * @return board - updated board record
  */
 export const updateBoardFromDb = async (id: string, payload: Board): Promise<BoardModel> => {
     return new Promise((resolve, reject) => {

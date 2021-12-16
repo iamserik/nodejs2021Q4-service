@@ -101,9 +101,9 @@ const updateBoardOpts = {
 /**
  * Board route plugin
  *
- * @param {FastifyInstance} fastify
- * @param {RouteOptions} options
- * @callback done callback function
+ * @param fastify - Fastify instance
+ * @param options - Router options
+ * @param done - callback function
  *
  * @return {void}
  */

@@ -16,10 +16,10 @@ fastify.register(require('./resources/boards/board.router'));
 fastify.register(require('./resources/tasks/task.router'));
 
 /**
- * Main function which starts server
+ * Starting server
  *
- * @param {string | number} port
- * @return {void}
+ * @param port - The number of port than server listening
+ * @return void
  */
 export default function main(port: string | number): void {
   fastify.listen(port, (err: Error | null) => {

@@ -15,7 +15,7 @@ export class BoardModel implements Board {
     /**
      * Board model class
      *
-     * @param {Board} board object
+     * @param board - object
      */
     constructor(board: Board) {
         this.id = board.id ? board.id : uuidv4();
