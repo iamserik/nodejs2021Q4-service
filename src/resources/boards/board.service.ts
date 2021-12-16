@@ -11,7 +11,7 @@ import {
 } from './board.memory.repository';
 
 /**
- * Reply all board records.
+ * Reply all board records
  *
  * @param req - Fastify request
  * @param reply - Fastify response
@@ -25,10 +25,10 @@ export const getAll = async (req: FastifyRequest, reply: FastifyReply): Promise<
 };
 
 /**
- * Reply board by id.
+ * Reply board by id
  *
  * @param req - Fastify request. That contains id of board
- * @param reply - Fastify response.
+ * @param reply - Fastify response
  *
  * @return {void}
  * @throws Error - if not valid uuid
@@ -46,10 +46,10 @@ export const getSingle = async (req: RequestById, reply: FastifyReply): Promise<
 };
 
 /**
- * Add and reply newly created board with status code 201.
+ * Add and reply newly created board with status code 201
  *
- * @param req - Fastify request. Contains board data.
- * @param reply - Fastify response.
+ * @param req - Fastify request. Contains board data
+ * @param reply - Fastify response
  *
  * @return {void}
  */
@@ -61,10 +61,10 @@ export const addBoard = async (req: BoardRequest, reply: FastifyReply): Promise<
 };
 
 /**
- * Deletes board by id. Reply success message.
+ * Deletes board by id. Reply success message
  *
- * @param req - Fastify request.
- * @param reply - Fastify response.
+ * @param req - Fastify request
+ * @param reply - Fastify response
  *
  * @return {void}
  * @throws Error - if not valid uuid
@@ -82,10 +82,10 @@ export const deleteBoard = async (req: RequestById, reply: FastifyReply): Promis
 };
 
 /**
- * Update board by id. Reply updated board record.
+ * Update board by id. Reply updated board record
  *
- * @param req - Fastify request.
- * @param reply - Fastify response.
+ * @param req - Fastify request
+ * @param reply - Fastify response
  *
  * @return {void}
  * @throws Error - if not valid uuid

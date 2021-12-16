@@ -27,7 +27,7 @@ export class TaskModel implements Task{
     /**
      * Task model class
      *
-     * @param {Task} task object
+     * @param task - object
      */
     constructor(task: Task) {
         this.id = task.id ? task.id : uuidv4();

@@ -3,19 +3,22 @@ import { TaskModel } from './task.model';
 import { Task } from '../../interfaces/Task';
 
 /**
- * Retrieves all tasks from db
+ * Return specific board tasks from db
  *
- * @return {Array<TaskModel>} array of tasks
+ * @param boardId - the board id
+ *
+ * @return tasks - array of tasks filtered by boardId
  */
 export const getAllFromDb = async (boardId: string): Promise<Array<TaskModel>> => new Promise((resolve) => {
     resolve(tasks.filter((task) => task.boardId === boardId));
 });
 
 /**
- * Retrieve task by id from db
+ * Return task by id from db
  *
- * @param {string} id (uuid)
- * @return {TaskModel} task
+ * @param id - target task's uuid
+ *
+ * @return task - object
  */
 export const getSingleFromDb = async (id: string): Promise<TaskModel> => new Promise((resolve, reject) => {
     const task = tasks.find((item) => item.id === id);
@@ -27,8 +30,8 @@ export const getSingleFromDb = async (id: string): Promise<TaskModel> => new Pro
 /**
  * Create and return new task
  *
- * @param {Task} payload task object
- * @return {TaskModel} new task
+ * @param payload - task object without id
+ * @return task - newly created task record
  */
 export const addTaskToDb = async (payload: Task): Promise<TaskModel> => new Promise((resolve) => {
     const task = new TaskModel(payload);
@@ -39,7 +42,8 @@ export const addTaskToDb = async (payload: Task): Promise<TaskModel> => new Prom
 /**
  * Delete task by id from db
  *
- * @param {string} id (uuid)
+ * @param id - target task's uuid
+ *
  * @return {void}
  */
 export const deleteTaskFormDb = async (id: string): Promise<void> => new Promise((resolve, reject) => {
@@ -54,9 +58,10 @@ export const deleteTaskFormDb = async (id: string): Promise<void> => new Promise
 });
 
 /**
- * Delete all tasks by boardId from db
+ * Delete all tasks of deleted board from db
  *
- * @param {string} boardId (uuid)
+ * @param boardId - board id which deleted
+ *
  * @return {void}
  */
 export const deleteBoardTasksFromDb = async (boardId: string): Promise<void> => new Promise((resolve) => {
@@ -66,9 +71,10 @@ export const deleteBoardTasksFromDb = async (boardId: string): Promise<void> => 
 });
 
 /**
- * Set users to null by userId
+ * Set all tasks user field to null. After user was deleted.
  *
- * @param {string} userId (uuid)
+ * @param userId - the user id
+ *
  * @return {void}
  */
 export const unsetUserTasksFromDb = async (userId: string): Promise<void> => new Promise((resolve) => {
@@ -82,11 +88,12 @@ export const unsetUserTasksFromDb = async (userId: string): Promise<void> => new
 });
 
 /**
- * Update existing task
+ * Update and return existing task from db
  *
- * @param {string} id
- * @param {Task} payload task object with new data
- * @return {TaskModel} updated task
+ * @param id - target task's uuid
+ * @param payload - task object data without id
+ *
+ * @return task - updated task record
  */
 export const updateTaskFromDb = async (id: string, payload: Task): Promise<TaskModel> => {
     return new Promise((resolve, reject) => {

@@ -16,10 +16,10 @@ import {
 } from './task.memory.repository';
 
 /**
- * All task records request handler
+ * Reply all board tasks.
  *
- * @param {RequestByBoardId} request
- * @param {FastifyReply} response
+ * @param req - Fastify request
+ * @param reply - Fastify response
  *
  * @return {void}
  */
@@ -33,10 +33,10 @@ export const getAll = async (req: RequestByBoardId, reply: FastifyReply) => {
 };
 
 /**
- * Single task request handler
+ * Reply task by id
  *
- * @param {RequestByTaskId} request
- * @param {FastifyReply} response
+ * @param req - Fastify request
+ * @param reply - Fastify response
  *
  * @return {void}
  * @throws {Error} if not valid uuid
@@ -54,10 +54,10 @@ export const getSingle = async (req: RequestByTaskId, reply: FastifyReply) => {
 };
 
 /**
- * Add task request handler
+ * Add and reply newly created task with status code 201
  *
- * @param {RequestCreatTask} request
- * @param {FastifyReply} response
+ * @param req - Fastify request
+ * @param reply - Fastify response
  *
  * @return {void}
  */
@@ -70,13 +70,13 @@ export const addTask = async (req: RequestCreatTask, reply: FastifyReply) => {
 };
 
 /**
- * Delete task request handler
+ * Deletes task by id. Reply success message
  *
- * @param {RequestByTaskId} request
- * @param {FastifyReply} response
+ * @param req - Fastify request
+ * @param reply - Fastify response
  *
  * @return {void}
- * @throws {Error} if not valid uuid
+ * @throws Error - if not valid uuid
  */
 export const deleteTask = async (req: RequestByTaskId, reply: FastifyReply) => {
     const { taskId } = req.params;
@@ -91,13 +91,13 @@ export const deleteTask = async (req: RequestByTaskId, reply: FastifyReply) => {
 };
 
 /**
- * Update task request handler
+ * Update task by id. Reply updated task record
  *
- * @param {RequestUpdateTask} request
- * @param {FastifyReply} response
+ * @param req - Fastify request
+ * @param reply - Fastify response
  *
  * @return {void}
- * @throws {Error} if not valid uuid
+ * @throws Error - if not valid uuid
  */
 export const updateTask = async (req: RequestUpdateTask, reply: FastifyReply) => {
     const { taskId } = req.params;

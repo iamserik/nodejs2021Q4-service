@@ -29,7 +29,7 @@ export const getSingleFromDb = async (id: string): Promise<BoardModel> => new Pr
 /**
  * Create and return new board
  *
- * @param payload - board object without id.
+ * @param payload - board object without id
  *
  * @return board - newly created board record
  */
