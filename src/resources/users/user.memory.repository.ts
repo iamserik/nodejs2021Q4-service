@@ -5,19 +5,20 @@ import { User } from "../../interfaces/User";
 const { unsetUserTasksFromDb } = require('../tasks/task.memory.repository');
 
 /**
- * Retrieves all users from db
+ * Return all users from db
  *
- * @return {Array<UserModel>} array of users
+ * @return users - array of users
  */
 export const getAllFromDb = async (): Promise<Array<UserModel>> => new Promise((resolve) => {
     resolve(users);
 });
 
 /**
- * Retrieve user by id from db
+ * Return user by id from db
  *
- * @param {string} id (uuid)
- * @return {UserModel} user
+ * @param id - target user's uuid
+ *
+ * @return user - object
  */
 export const getSingleFromDb = async (id: string): Promise<UserModel> => new Promise((resolve, reject) => {
     const user = users.find((item) => item.id === id);
@@ -29,8 +30,9 @@ export const getSingleFromDb = async (id: string): Promise<UserModel> => new Pro
 /**
  * Create and return new user
  *
- * @param {User} payload user object
- * @return {UserModel} new user
+ * @param  payload - user object without id.
+ *
+ * @return  user - newly created user record
  */
 export const addUserToDb = async (payload: User): Promise<UserModel> => new Promise((resolve) => {
     const user = new UserModel(payload);
@@ -41,7 +43,8 @@ export const addUserToDb = async (payload: User): Promise<UserModel> => new Prom
 /**
  * Delete user by id from db
  *
- * @param {string} id (uuid)
+ * @param id - target user's uuid
+ *
  * @return {void}
  */
 export const deleteUserFormDb = async (id: string): Promise<void> => new Promise((resolve, reject) => {
@@ -58,11 +61,12 @@ export const deleteUserFormDb = async (id: string): Promise<void> => new Promise
 });
 
 /**
- * Update existing user
+ * Update and return existing user from db
  *
- * @param {string} id
- * @param {User} payload user object with new data
- * @return {UserModel} updated user
+ * @param id - target user's uuid
+ * @param payload - user object data without id
+ *
+ * @return user - updated user record
  */
 export const updateUserFromDb = async (id: string, payload: User): Promise<UserModel> => {
     return new Promise((resolve, reject) => {

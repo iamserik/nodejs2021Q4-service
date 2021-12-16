@@ -18,7 +18,7 @@ export class UserModel implements User {
   /**
    * User model class
    *
-   * @param {User} user object
+   * @param user - object
    */
   constructor(user: User) {
     this.id = user.id ? user.id : uuidv4();

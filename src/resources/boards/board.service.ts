@@ -31,7 +31,7 @@ export const getAll = async (req: FastifyRequest, reply: FastifyReply): Promise<
  * @param reply - Fastify response.
  *
  * @return {void}
- * @throws {Error} if not valid uuid
+ * @throws Error - if not valid uuid
  */
 export const getSingle = async (req: RequestById, reply: FastifyReply): Promise<void> => {
     const { id } = req.params;
@@ -64,7 +64,7 @@ export const addBoard = async (req: BoardRequest, reply: FastifyReply): Promise<
  * Deletes board by id. Reply success message.
  *
  * @param req - Fastify request.
- * @param reply - Fastify response
+ * @param reply - Fastify response.
  *
  * @return {void}
  * @throws Error - if not valid uuid
@@ -85,10 +85,10 @@ export const deleteBoard = async (req: RequestById, reply: FastifyReply): Promis
  * Update board by id. Reply updated board record.
  *
  * @param req - Fastify request.
- * @param reply - Fastify response
+ * @param reply - Fastify response.
  *
  * @return {void}
- * @throws {Error} if not valid uuid
+ * @throws Error - if not valid uuid
  */
 export const updateBoard = async (req: BoardUpdateRequest, reply: FastifyReply): Promise<void> => {
     const { id } = req.params;

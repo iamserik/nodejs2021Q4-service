@@ -11,27 +11,27 @@ import {
 } from './user.memory.repository';
 
 /**
- * All users records request handler
+ * Reply all user records.
  *
- * @param {FastifyRequest} request
- * @param {FastifyReply} response
+ * @param req - Fastify request
+ * @param reply - Fastify response
  *
  * @return {void}
  */
-export const getAll = async (_: FastifyRequest, reply: FastifyReply): Promise<void> => {
+export const getAll = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
     getAllFromDb().then((data) => {
         reply.send(data);
     });
 };
 
 /**
- * Single user request handler
+ * Reply user by id.
  *
- * @param {RequestById} request
- * @param {FastifyReply} response
+ * @param req - Fastify request.
+ * @param reply - Fastify response.
  *
  * @return {void}
- * @throws {Error} if not valid uuid
+ * @throws Error - if not valid uuid
  */
 export const getSingle = async (req: RequestById, reply: FastifyReply): Promise<void> => {
     const { id } = req.params;
@@ -46,10 +46,10 @@ export const getSingle = async (req: RequestById, reply: FastifyReply): Promise<
 };
 
 /**
- * Add user request handler
+ * Add and reply newly created user with status code 201.
  *
- * @param {UserRequest} request
- * @param {FastifyReply} response
+ * @param req - Fastify request.
+ * @param reply - Fastify response.
  *
  * @return {void}
  */
@@ -61,10 +61,10 @@ export const addUser = async (req: UserRequest, reply: FastifyReply): Promise<vo
 };
 
 /**
- * Delete user request handler
+ * Deletes user by id. Reply success message.
  *
- * @param {RequestById} request
- * @param {FastifyReply} response
+ * @param req - Fastify request.
+ * @param reply - Fastify response.
  *
  * @return {void}
  * @throws {Error} if not valid uuid
@@ -82,13 +82,13 @@ export const deleteUser = async (req: RequestById, reply: FastifyReply): Promise
 };
 
 /**
- * Update user request handler
+ * Update user by id. Reply updated user record.
  *
- * @param {UserRequestUpdate} request
- * @param {FastifyReply} response
+ * @param req - Fastify request.
+ * @param reply - Fastify response.
  *
  * @return {void}
- * @throws {Error} if not valid uuid
+ * @throws Error - if not valid uuid
  */
 export const updateUser = async (req: UserRequestUpdate, reply: FastifyReply): Promise<void> => {
     const { id } = req.params;
