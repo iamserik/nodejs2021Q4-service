@@ -63,6 +63,8 @@ export const getSingle = async (req: RequestByTaskId, reply: FastifyReply) => {
  */
 export const addTask = async (req: RequestCreatTask, reply: FastifyReply) => {
     const { boardId } = req.params;
+
+    req.log.info({ body: req.body });
     addTaskToDb({ ...req.body, boardId }).then((data) => {
         reply.code(201);
         reply.send(data);
@@ -103,6 +105,7 @@ export const updateTask = async (req: RequestUpdateTask, reply: FastifyReply) =>
     const { taskId } = req.params;
     validateId(taskId);
 
+    req.log.info({ body: req.body });
     updateTaskFromDb(taskId, req.body).then((data) => {
         reply.send(data);
     }).catch((err) => {

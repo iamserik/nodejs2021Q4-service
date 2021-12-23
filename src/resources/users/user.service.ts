@@ -54,6 +54,7 @@ export const getSingle = async (req: RequestById, reply: FastifyReply): Promise<
  * @return {void}
  */
 export const addUser = async (req: UserRequest, reply: FastifyReply): Promise<void> => {
+    req.log.info({ body: req.body });
     addUserToDb(req.body).then((data) => {
         reply.code(201);
         reply.send(data);
@@ -94,6 +95,7 @@ export const updateUser = async (req: UserRequestUpdate, reply: FastifyReply): P
     const { id } = req.params;
     validateId(id);
 
+    req.log.info({ body: req.body });
     updateUserFromDb(id, req.body).then((data) => {
         reply.send(data);
     }).catch((err) => {

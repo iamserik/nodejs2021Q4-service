@@ -54,6 +54,7 @@ export const getSingle = async (req: RequestById, reply: FastifyReply): Promise<
  * @return {void}
  */
 export const addBoard = async (req: BoardRequest, reply: FastifyReply): Promise<void> => {
+    req.log.info({ body: req.body });
     addBoardToDb(req.body).then((data) => {
         reply.code(201);
         reply.send(data);
@@ -94,6 +95,7 @@ export const updateBoard = async (req: BoardUpdateRequest, reply: FastifyReply):
     const { id } = req.params;
     validateId(id);
 
+    req.log.info({ body: req.body });
     updateBoardFromDb(id, req.body).then((data) => {
         reply.send(data);
     }).catch((err) => {
