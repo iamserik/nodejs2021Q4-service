@@ -1,7 +1,16 @@
 import pino from 'pino';
-import * as fs from 'fs';
 import { Streams } from 'pino-multi-stream';
 import WritableStream from '../streams/writable';
+import config from '../common/config';
+
+const levels: Record<string, string> = {
+    0: 'fatal',
+    1: 'error',
+    2: 'warn',
+    3: 'info',
+    4: 'debug',
+    5: 'trace',
+};
 
 const streams: Streams = [
     { stream: new WritableStream('./logs/info.log') },
@@ -9,31 +18,8 @@ const streams: Streams = [
     { level: 'error', stream: new WritableStream('./logs/error.log') },
 ];
 
-const opts = {
-    levels: {
-        fatal: 60,
-        error: 50,
-        warn: 40,
-        info: 30,
-        debug: 20,
-    },
-    dedupe: true,
-}
-
-process.on('uncaughtException', (err, origin) => {
-    console.log('Error =============', err.message, origin);
-    fs.createWriteStream('./logs/error.log');
-    process.exit(1);
-});
-
-process.on('unhandledRejection', (err, origin) => {
-    console.log(err, origin);
-    fs.createWriteStream('./logs/error.log');
-    process.exit(1);
-});
-
 export const logger = pino({
-    level: 'info',
+    level: levels[config.LOWEST_DEBUG_LEVEL],
     serializers: {
         res (reply) {
             return {
@@ -48,4 +34,14 @@ export const logger = pino({
             };
         },
     },
-}, pino.multistream(streams, opts));
+}, pino.multistream(streams));
+
+process.on('uncaughtException', (err, origin) => {
+    logger.error(err.message);
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, origin) => {
+    logger.error(reason);
+    process.exit(1);
+});
