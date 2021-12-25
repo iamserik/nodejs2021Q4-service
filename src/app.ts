@@ -1,29 +1,10 @@
 import Fastify from 'fastify';
 import config from './common/config';
-import path from 'path';
+import { logger } from './logger';
 
-const today = new Date().toJSON().slice(0, 10).split('-').reverse().join('-');
 
 const fastify = Fastify({
-  logger: {
-    // prettyPrint: true,
-    file: path.join(__dirname, `./logs/log-${today}.log`),
-    level: 'info',
-    serializers: {
-      res (reply) {
-        return {
-          statusCode: reply.statusCode,
-        }
-      },
-      req (request) {
-        return {
-          method: request.method,
-          url: request.url,
-          parameters: request.params,
-        }
-      }
-    }
-  },
+  logger,
 });
 
 fastify.register(require('fastify-swagger'), {
