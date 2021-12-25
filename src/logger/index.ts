@@ -3,6 +3,8 @@ import { Streams } from 'pino-multi-stream';
 import WritableStream from '../streams/writable';
 import config from '../common/config';
 
+const today = new Date().toJSON().slice(0, 10).split('-').reverse().join('-');
+
 const levels: Record<string, string> = {
     0: 'fatal',
     1: 'error',
@@ -12,11 +14,25 @@ const levels: Record<string, string> = {
     5: 'trace',
 };
 
+const defaultWriteStream = new WritableStream(`./logs/info/Log-${today}.log`);
+const warnWriteStream = new WritableStream(`./logs/warn/Log-${today}.log`);
+const errorWriteStream = new WritableStream(`./logs/error/Log-${today}.log`);
+
 const streams: Streams = [
-    { stream: new WritableStream('./logs/info.log') },
-    { level: 'warn', stream: new WritableStream('./logs/warn.log') },
-    { level: 'error', stream: new WritableStream('./logs/error.log') },
+    { stream: defaultWriteStream },
+    { level: 'warn', stream: warnWriteStream },
+    { level: 'error', stream: errorWriteStream },
 ];
+
+process.on('uncaughtException', (err: Error) => {
+    errorWriteStream.write(`${err.message}\n`);
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (reason: string) => {
+    errorWriteStream.write(`${reason}\n`);
+    process.exit(1);
+});
 
 export const logger = pino({
     level: levels[config.LOWEST_DEBUG_LEVEL],
@@ -35,13 +51,3 @@ export const logger = pino({
         },
     },
 }, pino.multistream(streams));
-
-process.on('uncaughtException', (err, origin) => {
-    logger.error(err.message);
-    process.exit(1);
-});
-
-process.on('unhandledRejection', (reason, origin) => {
-    logger.error(reason);
-    process.exit(1);
-});

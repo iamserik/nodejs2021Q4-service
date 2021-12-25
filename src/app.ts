@@ -32,6 +32,4 @@ export default function main(port: string | number): void {
       process.exit(config.EXIT_CODE);
     }
   });
-
-  throw Error('Ooops');
 }
