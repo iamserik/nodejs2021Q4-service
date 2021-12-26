@@ -2,17 +2,9 @@ import pino from 'pino';
 import { Streams } from 'pino-multi-stream';
 import WritableStream from '../streams/writable';
 import config from '../common/config';
+import { validateLevel } from '../common/utils';
 
 const today = new Date().toJSON().slice(0, 10).split('-').reverse().join('-');
-
-const levels: Record<string, string> = {
-    0: 'fatal',
-    1: 'error',
-    2: 'warn',
-    3: 'info',
-    4: 'debug',
-    5: 'trace',
-};
 
 const defaultWriteStream = new WritableStream(`./logs/info/Log-${today}.log`);
 const warnWriteStream = new WritableStream(`./logs/warn/Log-${today}.log`);
@@ -35,7 +27,7 @@ process.on('unhandledRejection', (reason: string) => {
 });
 
 export const logger = pino({
-    level: levels[config.LOWEST_DEBUG_LEVEL],
+    level: validateLevel(config.LOWEST_DEBUG_LEVEL),
     serializers: {
         res (reply) {
             return {
