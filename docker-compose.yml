@@ -1,6 +1,6 @@
 services:
   postgres:
-    build: Dockerfile.pg
+    build: ./src/db
     container_name: postgres
     restart: always
     ports:

@@ -4,5 +4,4 @@ COPY package.json .
 RUN npm install
 COPY . .
 EXPOSE "${PORT}"
-CMD npm build
-CMD ["node", "./dist/bundle.js"]
+CMD npm build && node ./dist/bundle.js
