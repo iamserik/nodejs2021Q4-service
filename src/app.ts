@@ -1,7 +1,11 @@
 import Fastify from 'fastify';
 import config from './common/config';
+import { logger } from './logger';
 
-const fastify = Fastify({ logger: true });
+
+const fastify = Fastify({
+  logger,
+});
 
 fastify.register(require('fastify-swagger'), {
   exposeRoute: true,
