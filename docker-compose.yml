@@ -1,6 +1,7 @@
 services:
   postgres:
-    build: ./src/db
+    build: Dockerfile.pg
+    container_name: postgres
     restart: always
     ports:
       - "5431:${DB_PORT}"
@@ -10,6 +11,8 @@ services:
 
   nodejs-service:
     build: .
+    container_name: nodejs-service
+    restart: always
     depends_on:
       - postgres
     ports:

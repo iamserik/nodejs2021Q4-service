@@ -1,8 +1,8 @@
 FROM node:16.13-alpine
 WORKDIR /app
 COPY package.json .
-RUN npm install && npm install typescript -g
+RUN npm install
 COPY . .
-RUN tsc
 EXPOSE "${PORT}"
+CMD npm build
 CMD ["node", "./dist/bundle.js"]
