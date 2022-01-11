@@ -3,3 +3,8 @@ node_modules
 .DB_Store
 .idea
 .vscode
+.github
+test
+dist
+doc
+*.log

@@ -1,3 +1,5 @@
+version: "3.0"
+
 services:
   postgres:
     build: ./src/db
@@ -5,23 +7,33 @@ services:
     restart: always
     ports:
       - "5431:${DB_PORT}"
+    volumes:
+      - database:/var/lib/postgresql/data/
     environment:
       POSTGRES_DB: "${DB_DATABASE}"
       POSTGRES_HOST_AUTH_METHOD: trust
+    networks:
+      - user-network
 
   nodejs-service:
     build: .
     container_name: nodejs-service
-    restart: always
+    restart: on-failure
     depends_on:
       - postgres
     ports:
       - "${PORT}:${PORT}"
       - "${DEBUG_PORT}:${DEBUG_PORT}"
     volumes:
-      - .:/app
-      - /app/node_modules
+      - ./src:/app/src
+      - ./logs:/app/logs
     command: npm start
     environment:
       DATABASE_URL: "postgres://${DB_USERNAME}@${DB_HOST}/${DB_DATABASE}"
       PORT: "${PORT}"
+volumes:
+  logs:
+  database:
+networks:
+  user-network:
+    driver: bridge
