@@ -6,7 +6,7 @@ services:
     container_name: postgres
     restart: always
     ports:
-      - "5431:${DB_PORT}"
+      - "${DB_PORT}:${DB_PORT}"
     volumes:
       - database:/var/lib/postgresql/data/
     environment:
