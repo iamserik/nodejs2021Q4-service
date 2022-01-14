@@ -1,3 +1,4 @@
+import { createConnection } from 'typeorm';
 import Fastify from 'fastify';
 import config from './common/config';
 import { logger } from './logger';
@@ -25,7 +26,21 @@ fastify.register(require('./resources/tasks/task.router'));
  * @param port - The server listening port
  * @return {void}
  */
-export default function main(port: string | number): void {
+export default async function main(port: string | number): Promise<void> {
+  try {
+    await createConnection({
+      type: 'postgres',
+      host: config.DB_HOST,
+      username: config.DB_USERNAME,
+      password: undefined,
+      database: config.DB_DATABASE,
+    });
+    console.log('Connected to Postgres');
+  }catch(err) {
+    console.error('Unable connect to Postgres', err);
+    throw new Error('Unable to connect to db');
+  }
+
   fastify.listen(port, '0.0.0.0', (err: Error | null) => {
     if (err) {
       fastify.log.error(err);

@@ -6,14 +6,12 @@ services:
     container_name: postgres
     restart: always
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "${DB_PORT}:5432"
     volumes:
       - database:/var/lib/postgresql/data/
     environment:
       POSTGRES_DB: "${DB_DATABASE}"
       POSTGRES_HOST_AUTH_METHOD: trust
-    networks:
-      - user-network
 
   nodejs-service:
     build: .
@@ -29,11 +27,7 @@ services:
       - ./logs:/app/logs
     command: npm start
     environment:
-      DATABASE_URL: "postgres://${DB_USERNAME}@${DB_HOST}/${DB_DATABASE}"
       PORT: "${PORT}"
 volumes:
   logs:
   database:
-networks:
-  user-network:
-    driver: bridge
