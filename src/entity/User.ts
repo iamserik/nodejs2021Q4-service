@@ -1,10 +1,8 @@
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column } from 'typeorm';
+import { Base } from './TimestampedEntity';
 
 @Entity('users')
-export class User extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
-
+export class User extends Base {
     @Column()
     name: string;
 
@@ -13,10 +11,4 @@ export class User extends BaseEntity {
 
     @Column()
     password: string;
-
-    @CreateDateColumn()
-    created_at: Date;
-
-    @UpdateDateColumn()
-    updated_at: Date;
 }

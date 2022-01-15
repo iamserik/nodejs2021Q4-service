@@ -20,10 +20,6 @@ const Board = {
     properties: {
         id: { type: 'string' },
         title: { type: 'string' },
-        columns: {
-            type: 'array',
-            items: Column,
-        },
     },
 };
 
@@ -59,7 +55,7 @@ const getSingleBoardOpts = {
 const postBoardOpts = {
     schema: {
         body: {
-            required: ['title', 'columns'],
+            required: ['title'],
             ...Board,
         },
         response: {
@@ -87,7 +83,7 @@ const deleteBoardOpts = {
 const updateBoardOpts = {
     schema: {
         body: {
-            required: ['title', 'columns'],
+            required: ['title'],
             ...Board,
         },
         response: {

@@ -30,7 +30,7 @@ export const getSingleFromDb = async (id: string): Promise<User> => {
  *
  * @return  user - newly created user record
  */
-export const addUserToDb = async (payload: IUser): Promise<User | void> => {
+export const addUserToDb = async (payload: IUser): Promise<User> => {
     try {
         const user = await User.create(payload);
         await user.save();
@@ -39,6 +39,7 @@ export const addUserToDb = async (payload: IUser): Promise<User | void> => {
         if (err instanceof Error) {
             throw new Error(err.message);
         }
+        throw new Error("Something went wrong");
     }
 };
 

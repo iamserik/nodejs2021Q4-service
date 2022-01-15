@@ -3,7 +3,6 @@ import { FastifyRequest } from 'fastify';
 export interface Board {
     id: string | undefined;
     title: string;
-    columns: Array<string>;
 }
 
 export type BoardRequest = FastifyRequest<{
