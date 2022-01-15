@@ -2,6 +2,7 @@ import { createConnection } from 'typeorm';
 import Fastify from 'fastify';
 import config from './common/config';
 import { logger } from './logger';
+import { User } from './entity/User';
 
 
 const fastify = Fastify({
@@ -28,12 +29,15 @@ fastify.register(require('./resources/tasks/task.router'));
  */
 export default async function main(port: string | number): Promise<void> {
   try {
-    await createConnection({
+    const connection = await createConnection({
       type: 'postgres',
       host: config.DB_HOST,
       username: config.DB_USERNAME,
       password: undefined,
       database: config.DB_DATABASE,
+      entities: [User],
+      synchronize: false,
+      migrations: ['./migrations/*.ts'],
     });
     console.log('Connected to Postgres');
   }catch(err) {

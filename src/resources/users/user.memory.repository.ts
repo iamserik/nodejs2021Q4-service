@@ -1,6 +1,7 @@
-import { UserModel } from "./user.model";
-import { users } from "../../db/users";
-import { User } from "../../interfaces/User";
+import { UserModel } from './user.model';
+import { users } from '../../db/users';
+import { User } from '../../interfaces/User';
+import { User as UserTable } from '../../entity/User';
 
 const { unsetUserTasksFromDb } = require('../tasks/task.memory.repository');
 
@@ -10,7 +11,8 @@ const { unsetUserTasksFromDb } = require('../tasks/task.memory.repository');
  * @return users - array of users
  */
 export const getAllFromDb = async (): Promise<Array<UserModel>> => new Promise((resolve) => {
-    resolve(users);
+    const usersArr = UserTable.find();
+    resolve(usersArr);
 });
 
 /**

@@ -6,3 +6,4 @@ dist/
 .git
 .DB_Store
 .idea
+src/migrations/*.ts
