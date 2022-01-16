@@ -32,9 +32,17 @@ export const getSingleFromDb = async (id: string): Promise<Board> => {
  * @return board - newly created board record
  */
 export const addBoardToDb = async (payload: IBoard): Promise<Board> => {
-    const board = await Board.create(payload);
-    await board.save();
-    return board;
+    try {
+        const board = await Board.create(payload);
+        await board.save();
+        return board;
+    } catch(err) {
+        if (err instanceof Error) {
+            throw new Error(err.message);
+        }
+        throw new Error('Something went wrong');
+    }
+
 };
 
 /**

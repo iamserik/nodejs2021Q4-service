@@ -19,7 +19,7 @@ export class TaskModel implements Task{
     userId: string | null;
 
     /** @type {string} */
-    boardId: string;
+    boardId: string | null;
 
     /** @type {string | null} */
     columnId: string | null;

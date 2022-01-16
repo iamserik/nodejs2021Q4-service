@@ -4,6 +4,7 @@ import config from './common/config';
 import { logger } from './logger';
 import { User } from './entity/User';
 import { Board } from './entity/Board';
+import { Task } from './entity/Task';
 
 
 const fastify = Fastify({
@@ -36,7 +37,7 @@ export default async function main(port: string | number): Promise<void> {
       username: config.DB_USERNAME,
       password: undefined,
       database: config.DB_DATABASE,
-      entities: [User, Board],
+      entities: [User, Board, Task],
       synchronize: false,
       migrations: ['./migrations/*.ts'],
     });
