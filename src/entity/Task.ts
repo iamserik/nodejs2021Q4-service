@@ -25,7 +25,7 @@ export class Task extends Base {
     @ManyToOne(
         () => Board,
         (board: Board) => board.tasks,
-        { nullable: true, onDelete: 'CASCADE' },
+        { onDelete: 'CASCADE' },
     )
     @JoinColumn({ name: 'boardId' })
     board: Board;

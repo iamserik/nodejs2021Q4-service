@@ -86,3 +86,17 @@ docker-compose up -d
 ```
 
 ## Working with TypeORM
+
+To run migrations. After running docker execute this commands in your terminal.
+
+1. Generate migration file
+
+```
+docker exec -it nodejs-service npm run makemigration
+```
+
+2. Create tables
+
+```
+docker exec -it nodejs-service npm run migrate
+```

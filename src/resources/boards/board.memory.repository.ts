@@ -1,13 +1,20 @@
 import { Board as IBoard } from '../../interfaces/Board';
 import { Board } from '../../entity/Board';
-// import { deleteBoardTasksFromDb } from '../tasks/task.memory.repository';
+
+const columns = [
+    { title: 'Backlog', order: 1 },
+    { title: 'Sprint', order: 2 }
+]
 
 /**
  * Return all boards from db.
  *
  * @return boards - array of boards
  */
-export const getAllFromDb = async (): Promise<Array<Board>> => Board.find();
+export const getAllFromDb = async (): Promise<Array<IBoard>> => {
+    const boards = await Board.find();
+    return boards.map((board) => ({ ...board, columns }));
+};
 
 /**
  * Return board by id from db
@@ -16,10 +23,10 @@ export const getAllFromDb = async (): Promise<Array<Board>> => Board.find();
  *
  * @return board - object.
  */
-export const getSingleFromDb = async (id: string): Promise<Board> => {
+export const getSingleFromDb = async (id: string): Promise<IBoard> => {
     const board = await Board.findOne(id);
 
-    if (board) return board;
+    if (board) return { ...board, columns };
     else throw new Error(`Board with id ${id} not found`);
 };
 
@@ -30,11 +37,11 @@ export const getSingleFromDb = async (id: string): Promise<Board> => {
  *
  * @return board - newly created board record
  */
-export const addBoardToDb = async (payload: IBoard): Promise<Board> => {
+export const addBoardToDb = async (payload: IBoard): Promise<IBoard> => {
     try {
         const board = await Board.create(payload);
         await board.save();
-        return board;
+        return { ...board, columns };
     } catch(err) {
         if (err instanceof Error) {
             throw new Error(err.message);
@@ -56,11 +63,6 @@ export const deleteBoardFormDb = async (id: string): Promise<void> => {
     if (!response.affected) {
         throw new Error(`Board with id ${id} not found`);
     }
-
-    // FIXME check task deletes with board
-    // deleteBoardTasksFromDb(id).then(() => {
-    //     resolve();
-    // });
 };
 
 /**
@@ -71,9 +73,9 @@ export const deleteBoardFormDb = async (id: string): Promise<void> => {
  *
  * @return board - updated board record
  */
-export const updateBoardFromDb = async (id: string, payload: IBoard): Promise<Board> => {
-    await Board.update(id, payload);
+export const updateBoardFromDb = async (id: string, payload: IBoard): Promise<IBoard> => {
+    await Board.update(id, { title: payload.title });
     const board = await Board.findOne(id);
-    if (board) return board;
+    if (board) return { ...board, columns };
     else throw new Error(`Board with id ${id} not found`);
 };
