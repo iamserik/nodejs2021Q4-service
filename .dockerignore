@@ -1,0 +1,10 @@
+node_modules
+.git
+.DB_Store
+.idea
+.vscode
+.github
+test
+dist
+doc
+*.log

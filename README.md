@@ -70,3 +70,17 @@ npm run lint
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+### Working with Docker
+
+To start docker containers in interactive mode run
+
+```
+docker-compose up
+```
+
+To start docker containers in background run
+
+```
+docker-compose up -d
+```

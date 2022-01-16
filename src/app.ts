@@ -26,7 +26,7 @@ fastify.register(require('./resources/tasks/task.router'));
  * @return {void}
  */
 export default function main(port: string | number): void {
-  fastify.listen(port, (err: Error | null) => {
+  fastify.listen(port, '0.0.0.0', (err: Error | null) => {
     if (err) {
       fastify.log.error(err);
       process.exit(config.EXIT_CODE);
