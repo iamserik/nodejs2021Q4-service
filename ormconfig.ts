@@ -1,9 +1,9 @@
-{
+export default {
   "type": "postgres",
-  "host": "postgres",
-  "username": "postgres",
+  "host": process.env.DB_HOST,
+  "username": process.env.DB_USERNAME,
   "password": null,
-  "database": "nodejs_service",
+  "database": process.env.DB_DATABASE,
   "synchronize": false,
   "logging": false,
   "entities": [

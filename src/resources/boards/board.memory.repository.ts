@@ -1,7 +1,6 @@
-import { boards } from '../../db/boards';
-import { deleteBoardTasksFromDb } from '../tasks/task.memory.repository';
 import { Board as IBoard } from '../../interfaces/Board';
 import { Board } from '../../entity/Board';
+// import { deleteBoardTasksFromDb } from '../tasks/task.memory.repository';
 
 /**
  * Return all boards from db.

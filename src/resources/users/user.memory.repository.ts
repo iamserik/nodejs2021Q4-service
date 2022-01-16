@@ -1,7 +1,7 @@
 import { User as IUser } from '../../interfaces/User';
 import { User } from '../../entity/User';
 
-const { unsetUserTasksFromDb } = require('../tasks/task.memory.repository');
+// const { unsetUserTasksFromDb } = require('../tasks/task.memory.repository');
 
 /**
  * Return all users from db

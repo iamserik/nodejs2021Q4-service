@@ -1,4 +1,3 @@
-import { tasks } from '../../db/tasks';
 import { Task as ITask } from '../../interfaces/Task';
 import { Task } from '../../entity/Task';
 import { Board } from '../../entity/Board';
@@ -72,36 +71,6 @@ export const deleteTaskFormDb = async (id: string): Promise<void> => {
         throw new Error(`Task with id ${id} not found`);
     }
 };
-
-/**
- * Delete all tasks of deleted board from db
- *
- * @param boardId - board id which deleted
- *
- * @return {void}
- */
-export const deleteBoardTasksFromDb = async (boardId: string): Promise<void> => new Promise((resolve) => {
-    const cleanedTasks = tasks.filter((task) => task.boardId !== boardId);
-    tasks.splice(0, tasks.length, ...cleanedTasks);
-    resolve();
-});
-
-/**
- * Set all tasks user field to null. After user was deleted.
- *
- * @param userId - the user id
- *
- * @return {void}
- */
-export const unsetUserTasksFromDb = async (userId: string): Promise<void> => new Promise((resolve) => {
-    const mapped = tasks.map((task) => {
-        if (task.userId === userId) return { ...task, userId: null };
-        return task;
-    });
-
-    tasks.splice(0, tasks.length, ...mapped);
-    resolve();
-});
 
 /**
  * Update and return existing task from db
