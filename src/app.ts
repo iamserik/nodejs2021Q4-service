@@ -31,7 +31,7 @@ fastify.register(require('./resources/tasks/task.router'));
  */
 export default async function main(port: string | number): Promise<void> {
   try {
-    const connection = await createConnection({
+    await createConnection({
       type: 'postgres',
       host: config.DB_HOST,
       username: config.DB_USERNAME,

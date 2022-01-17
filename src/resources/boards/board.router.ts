@@ -7,14 +7,6 @@ import {
     updateBoard,
 } from './board.service';
 
-const Column = {
-    type: 'object',
-    properties: {
-        title: { type: 'string' },
-        order: { type: 'number' },
-    },
-}
-
 const Board = {
     type: 'object',
     properties: {

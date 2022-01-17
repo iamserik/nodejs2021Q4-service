@@ -1,4 +1,3 @@
-import { createQueryBuilder } from 'typeorm';
 import { Task as ITask } from '../../interfaces/Task';
 import { Task } from '../../entity/Task';
 import { Board } from '../../entity/Board';
