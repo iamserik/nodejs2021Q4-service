@@ -13,7 +13,9 @@
     "start": "nodemon --exitcrash --legacy-watch src/server.ts",
     "lint": "eslint --ext .js,.ts --fix src/",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
-    "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace"
+    "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace",
+    "makemigration": "ts-node ./node_modules/typeorm/cli.js migration:generate -n migrations -d src/migrations -p",
+    "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run"
   },
   "keywords": [
     "rs",
@@ -49,7 +51,10 @@
     "dotenv": "10.0.0",
     "fastify": "^3.24.1",
     "fastify-swagger": "^4.12.6",
+    "pg": "^8.7.1",
     "pino": "^7.6.1",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.41",
     "uuid": "8.3.2",
     "yamljs": "0.3.0"
   },

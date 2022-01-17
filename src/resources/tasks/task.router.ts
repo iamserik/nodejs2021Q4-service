@@ -15,7 +15,7 @@ const Task = {
         order: { type: 'number'},
         description: { type: 'string' },
         userId: { type: 'string', nullable: true },
-        boardId: { type: 'string' },
+        boardId: { type: 'string', nullable: true },
         columnId: { type: 'string', nullable: true },
     },
 };
