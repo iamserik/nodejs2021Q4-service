@@ -1,7 +1,14 @@
 import { User as IUser } from '../../interfaces/User';
 import { User } from '../../entity/User';
 
-// const { unsetUserTasksFromDb } = require('../tasks/task.memory.repository');
+export const loginDb = async (payload: { login: string, password: string }): Promise<User> => {
+    const user = await User.findOne({
+        where: [{ login: payload.login, password: payload.password }],
+    });
+
+    if (user) return user;
+    else throw new Error('Not correct login or password');
+}
 
 /**
  * Return all users from db
@@ -19,8 +26,8 @@ export const getAllFromDb = async (): Promise<Array<User>> => User.find();
  */
 export const getSingleFromDb = async (id: string): Promise<User> => {
     const user = await User.findOne(id);
-    if(user) return user;
-    else throw new Error(`User with id ${id} not found`)
+    if (user) return user;
+    else throw new Error(`User with id ${id} not found`);
 };
 
 /**

@@ -7,6 +7,13 @@ export interface User {
     password: string;
 }
 
+export type LoginRequest = FastifyRequest<{
+    Body: {
+        login: string,
+        password: string,
+    }
+}>;
+
 export type UserRequest = FastifyRequest<{
     Body: User,
 }>;

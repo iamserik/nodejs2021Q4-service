@@ -1,6 +1,8 @@
 import { createConnection } from 'typeorm';
 import Fastify from 'fastify';
+import jwt from "fastify-jwt";
 import config from './common/config';
+import { requestMiddleware } from './common/requestMiddleware';
 import { logger } from './logger';
 import { User } from './entity/User';
 import { Board } from './entity/Board';
@@ -9,6 +11,12 @@ import { Task } from './entity/Task';
 
 const fastify = Fastify({
   logger,
+});
+
+fastify.addHook("onRequest", requestMiddleware);
+
+fastify.register(jwt, {
+  secret: config.JWT_SECRET_KEY || 'awesome-secret-key',
 });
 
 fastify.register(require('fastify-swagger'), {

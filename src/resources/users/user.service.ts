@@ -1,14 +1,27 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { validateId } from '../../common/utils';
 import { RequestById } from '../../interfaces/Common';
-import { UserRequest, UserRequestUpdate } from '../../interfaces/User';
+import { UserRequest, UserRequestUpdate, LoginRequest } from '../../interfaces/User';
 import {
+    loginDb,
     getAllFromDb,
     getSingleFromDb,
     addUserToDb,
     deleteUserFormDb,
     updateUserFromDb,
 } from './user.memory.repository';
+
+export const login = async (req: LoginRequest, reply: FastifyReply): Promise<void> => {
+    const user = req.body;
+    loginDb(user).then(async (data) => {
+        const { login, id } = data;
+        const token = await reply.jwtSign({ userId: id, login });
+        reply.send({ token });
+    }).catch((err) => {
+        reply.code(404);
+        reply.send({ message: err.message });
+    })
+}
 
 /**
  * Reply all user records.
