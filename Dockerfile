@@ -1,7 +1,7 @@
 FROM node:16-alpine
 WORKDIR /app
 COPY package.json .
-RUN npm install  && npm cache clean --force
+RUN npm install
 COPY . .
 EXPOSE "${PORT}"
 CMD npm build && node ./dist/bundle.js

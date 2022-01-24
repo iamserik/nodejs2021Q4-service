@@ -6,6 +6,7 @@ const {
   addUser,
   deleteUser,
   updateUser,
+  login,
 } = require('./user.service');
 
 const User = {
@@ -23,6 +24,25 @@ const notFound = {
     message: { type: 'string' },
   },
 };
+
+const loginOpts = {
+  schema: {
+    body: {
+      required: ['login', 'password'],
+      ...User,
+    },
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          token: { type: 'string' },
+        },
+      },
+      403: notFound,
+    }
+  },
+  handler: login,
+}
 
 const getAllUsersOpts = {
   schema: {
@@ -98,6 +118,8 @@ const updateUserOpts = {
  * @return {void}
  */
 export default function usersRoute(fastify: FastifyInstance, options: RouteOptions, done: () => void): void {
+  fastify.post('/login', loginOpts);
+
   fastify.get('/users', getAllUsersOpts);
 
   fastify.get('/users/:id', getSingleUserOpts);

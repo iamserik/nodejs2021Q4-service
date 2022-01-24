@@ -1,17 +1,21 @@
-import { UserModel } from "./user.model";
-import { users } from "../../db/users";
-import { User } from "../../interfaces/User";
+import { User as IUser } from '../../interfaces/User';
+import { User } from '../../entity/User';
 
-const { unsetUserTasksFromDb } = require('../tasks/task.memory.repository');
+export const loginDb = async (payload: { login: string, password: string }): Promise<User> => {
+    const user = await User.findOne({
+        where: [{ login: payload.login, password: payload.password }],
+    });
+
+    if (user) return user;
+    else throw new Error('Not correct login or password');
+}
 
 /**
  * Return all users from db
  *
  * @return users - array of users
  */
-export const getAllFromDb = async (): Promise<Array<UserModel>> => new Promise((resolve) => {
-    resolve(users);
-});
+export const getAllFromDb = async (): Promise<Array<User>> => User.find();
 
 /**
  * Return user by id from db
@@ -20,12 +24,11 @@ export const getAllFromDb = async (): Promise<Array<UserModel>> => new Promise((
  *
  * @return user - object
  */
-export const getSingleFromDb = async (id: string): Promise<UserModel> => new Promise((resolve, reject) => {
-    const user = users.find((item) => item.id === id);
-
-    if (user) resolve(user);
-    else reject(new Error(`User with id ${id} not found`));
-});
+export const getSingleFromDb = async (id: string): Promise<User> => {
+    const user = await User.findOne(id);
+    if (user) return user;
+    else throw new Error(`User with id ${id} not found`);
+};
 
 /**
  * Create and return new user
@@ -34,11 +37,18 @@ export const getSingleFromDb = async (id: string): Promise<UserModel> => new Pro
  *
  * @return  user - newly created user record
  */
-export const addUserToDb = async (payload: User): Promise<UserModel> => new Promise((resolve) => {
-    const user = new UserModel(payload);
-    users.push(user);
-    resolve(user);
-});
+export const addUserToDb = async (payload: IUser): Promise<User> => {
+    try {
+        const user = await User.create(payload);
+        await user.save();
+        return user;
+    } catch(err) {
+        if (err instanceof Error) {
+            throw new Error(err.message);
+        }
+        throw new Error("Something went wrong");
+    }
+};
 
 /**
  * Delete user by id from db
@@ -47,18 +57,16 @@ export const addUserToDb = async (payload: User): Promise<UserModel> => new Prom
  *
  * @return {void}
  */
-export const deleteUserFormDb = async (id: string): Promise<void> => new Promise((resolve, reject) => {
-    const userPosition = users.findIndex((item) => item.id === id);
-
-    if (userPosition !== -1) {
-        users.splice(userPosition, 1);
-        unsetUserTasksFromDb(id).then(() => {
-            resolve();
-        });
-    } else {
-        reject(new Error(`User with id ${id} not found`));
+export const deleteUserFormDb = async (id: string): Promise<void> => {
+    const response = await User.delete(id);
+    if (!response.affected) {
+        throw new Error(`User with id ${id} not found`);
     }
-});
+    // FIXME check tasks deletes with user
+    // else {
+    //     await unsetUserTasksFromDb(id);
+    // }
+}
 
 /**
  * Update and return existing user from db
@@ -68,16 +76,9 @@ export const deleteUserFormDb = async (id: string): Promise<void> => new Promise
  *
  * @return user - updated user record
  */
-export const updateUserFromDb = async (id: string, payload: User): Promise<UserModel> => {
-    return new Promise((resolve, reject) => {
-        const userIndex = users.findIndex((item) => item.id === id);
-
-        if (userIndex !== -1) {
-            const user = new UserModel({ ...payload, id });
-            users.splice(userIndex, 1, user);
-            resolve(user);
-        } else {
-            reject(new Error(`User with id ${id} not found`));
-        }
-    });
+export const updateUserFromDb = async (id: string, payload: IUser): Promise<User | void> => {
+    await User.update(id, payload);
+    const user = await User.findOne(id);
+    if (user) return user;
+    else throw new Error(`User with id ${id} not found`);
 };

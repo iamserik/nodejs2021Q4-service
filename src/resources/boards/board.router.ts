@@ -7,23 +7,12 @@ import {
     updateBoard,
 } from './board.service';
 
-const Column = {
-    type: 'object',
-    properties: {
-        title: { type: 'string' },
-        order: { type: 'number' },
-    },
-}
-
 const Board = {
     type: 'object',
     properties: {
         id: { type: 'string' },
         title: { type: 'string' },
-        columns: {
-            type: 'array',
-            items: Column,
-        },
+        columns: { type: 'array' }
     },
 };
 
@@ -59,7 +48,7 @@ const getSingleBoardOpts = {
 const postBoardOpts = {
     schema: {
         body: {
-            required: ['title', 'columns'],
+            required: ['title'],
             ...Board,
         },
         response: {
@@ -87,7 +76,7 @@ const deleteBoardOpts = {
 const updateBoardOpts = {
     schema: {
         body: {
-            required: ['title', 'columns'],
+            required: ['title'],
             ...Board,
         },
         response: {

@@ -1,6 +1,7 @@
-import { tasks } from '../../db/tasks';
-import { TaskModel } from './task.model';
-import { Task } from '../../interfaces/Task';
+import { Task as ITask } from '../../interfaces/Task';
+import { Task } from '../../entity/Task';
+import { Board } from '../../entity/Board';
+import { User } from '../../entity/User';
 
 /**
  * Return specific board tasks from db
@@ -9,9 +10,13 @@ import { Task } from '../../interfaces/Task';
  *
  * @return tasks - array of tasks filtered by boardId
  */
-export const getAllFromDb = async (boardId: string): Promise<Array<TaskModel>> => new Promise((resolve) => {
-    resolve(tasks.filter((task) => task.boardId === boardId));
-});
+export const getAllFromDb = async (boardId: string): Promise<Array<ITask>> => {
+    const tasks = await Task.find({ where: [{ board: boardId }], loadRelationIds: true });
+    const mapped = tasks.map((task) => {
+        return { ...task, userId: task.user && task.user.toString(), boardId: task.board && task.board.toString(), columnId: null };
+    })
+    return mapped;
+};
 
 /**
  * Return task by id from db
@@ -20,12 +25,14 @@ export const getAllFromDb = async (boardId: string): Promise<Array<TaskModel>> =
  *
  * @return task - object
  */
-export const getSingleFromDb = async (id: string): Promise<TaskModel> => new Promise((resolve, reject) => {
-    const task = tasks.find((item) => item.id === id);
+export const getSingleFromDb = async (id: string): Promise<ITask> => {
+    const task = await Task.findOne(id, {
+        loadRelationIds: true,
+    });
 
-    if (task) resolve(task);
-    else reject(new Error(`Task with id ${id} not found`));
-});
+    if (task) return { ...task, userId: task.user && task.user.toString(), boardId: task.board && task.board.toString(), columnId: null };
+    else throw new Error(`Task with id ${id} not found`);
+};
 
 /**
  * Create and return new task
@@ -33,11 +40,38 @@ export const getSingleFromDb = async (id: string): Promise<TaskModel> => new Pro
  * @param payload - task object without id
  * @return task - newly created task record
  */
-export const addTaskToDb = async (payload: Task): Promise<TaskModel> => new Promise((resolve) => {
-    const task = new TaskModel(payload);
-    tasks.push(task);
-    resolve(task);
-});
+export const addTaskToDb = async (payload: ITask): Promise<ITask> => {
+    const {title, description, order, boardId, userId} = payload;
+
+    const board = await Board.findOne(boardId);
+
+    try {
+        const task = await Task.create({
+            title,
+            description,
+            order,
+            ...userId && { user: await User.findOne(userId) },
+            board,
+        });
+
+        await task.save();
+
+        return {
+            id: task.id,
+            order: task.order,
+            title: task.title,
+            description: task.description,
+            columnId: null,
+            userId: userId && task.user.id,
+            boardId: task.board && task.board.id,
+        };
+    } catch(err) {
+        if (err instanceof Error) {
+            throw new Error(err.message);
+        }
+        throw new Error('Something went wrong');
+    }
+};
 
 /**
  * Delete task by id from db
@@ -46,46 +80,12 @@ export const addTaskToDb = async (payload: Task): Promise<TaskModel> => new Prom
  *
  * @return {void}
  */
-export const deleteTaskFormDb = async (id: string): Promise<void> => new Promise((resolve, reject) => {
-    const taskIndex = tasks.findIndex((item) => item.id === id);
-
-    if (taskIndex !== -1) {
-        tasks.splice(taskIndex, 1);
-        resolve();
-    } else {
-        reject(new Error(`Task with id ${id} not found`));
+export const deleteTaskFormDb = async (id: string): Promise<void> => {
+    const response = await Task.delete(id);
+    if (!response.affected) {
+        throw new Error(`Task with id ${id} not found`);
     }
-});
-
-/**
- * Delete all tasks of deleted board from db
- *
- * @param boardId - board id which deleted
- *
- * @return {void}
- */
-export const deleteBoardTasksFromDb = async (boardId: string): Promise<void> => new Promise((resolve) => {
-    const cleanedTasks = tasks.filter((task) => task.boardId !== boardId);
-    tasks.splice(0, tasks.length, ...cleanedTasks);
-    resolve();
-});
-
-/**
- * Set all tasks user field to null. After user was deleted.
- *
- * @param userId - the user id
- *
- * @return {void}
- */
-export const unsetUserTasksFromDb = async (userId: string): Promise<void> => new Promise((resolve) => {
-    const mapped = tasks.map((task) => {
-        if (task.userId === userId) return { ...task, userId: null };
-        return task;
-    });
-
-    tasks.splice(0, tasks.length, ...mapped);
-    resolve();
-});
+};
 
 /**
  * Update and return existing task from db
@@ -95,16 +95,21 @@ export const unsetUserTasksFromDb = async (userId: string): Promise<void> => new
  *
  * @return task - updated task record
  */
-export const updateTaskFromDb = async (id: string, payload: Task): Promise<TaskModel> => {
-    return new Promise((resolve, reject) => {
-        const taskIndex = tasks.findIndex((item) => item.id === id);
+export const updateTaskFromDb = async (id: string, payload: ITask): Promise<Task> => {
+    const { title, description, order, boardId, userId } = payload;
 
-        if (taskIndex !== -1) {
-            const task = new TaskModel({...payload, id});
-            tasks.splice(taskIndex, 1, task);
-            resolve(task);
-        } else {
-            reject(new Error(`Task with id ${id} not found`));
-        }
+    const board = await Board.findOne(boardId);
+
+    await Task.update(id, {
+        title,
+        description,
+        order,
+        ...userId && { user: await User.findOne(userId) },
+        board,
     });
+
+    const task = await Task.findOne(id);
+
+    if (task) return task;
+    else throw new Error(`Task with id ${id} not found`);
 };
