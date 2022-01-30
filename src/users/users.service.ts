@@ -1,18 +1,21 @@
-import { randomUUID } from 'crypto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from "typeorm";
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from "../entity/users.entity";
 
 @Injectable()
 export class UsersService {
-  private users = [];
-
-  getAll() {
-    return this.users;
+  constructor(@InjectRepository(User) private usersRepository: Repository<User>) {
   }
 
-  getById(id: string) {
-    const user = this.users.find((user) => user.id === id);
+  async getAll(): Promise<User[]> {
+    return await this.usersRepository.find();
+  }
+
+  async getById(id: string): Promise<User> {
+    const user = await this.usersRepository.findOne(id);
 
     if (user) {
       return user;
@@ -24,19 +27,21 @@ export class UsersService {
     }
   }
 
-  create(user: CreateUserDto) {
-    const newUser = {
-      ...user,
-      id: randomUUID(),
-    };
-    this.users.push(newUser);
-    return newUser;
+  async create(payload: CreateUserDto) {
+    try {
+      const user = await this.usersRepository.create(payload);
+      await user.save();
+      return user;
+    } catch(error) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
+    }
   }
 
-  delete(id: string): { message: string } {
-    const index = this.users.findIndex((user) => user.id === id);
-    if (index) {
-      this.users.splice(index, 1);
+  async delete(id: string): Promise<{ message: string }> {
+    const response = await this.usersRepository.delete(id);
+    if (response.affected) {
       return {
         message: 'User successfully deleted',
       };
@@ -48,13 +53,11 @@ export class UsersService {
     }
   }
 
-  update(id: string, user: UpdateUserDto): UpdateUserDto {
-    const dbUser = this.users.find((user) => user.id === id);
-    if (dbUser) {
-      dbUser.name = user.name;
-      dbUser.password = user.password;
-      dbUser.login = user.login;
-      return dbUser;
+  async update(id: string, payload: UpdateUserDto): Promise<User> {
+    await this.usersRepository.update(id, payload);
+    const user = await this.usersRepository.findOne(id);
+    if (user) {
+      return user;
     } else {
       throw new HttpException(
         `User with id ${id} not found`,

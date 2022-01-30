@@ -6,14 +6,12 @@ services:
     container_name: postgres
     restart: always
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "${DB_PORT}:5432"
     volumes:
       - database:/var/lib/postgresql/data/
     environment:
       POSTGRES_DB: "${DB_DATABASE}"
       POSTGRES_HOST_AUTH_METHOD: trust
-    networks:
-      - user-network
 
   nodejs-service:
     build: .
@@ -34,6 +32,3 @@ services:
 volumes:
   logs:
   database:
-networks:
-  user-network:
-    driver: bridge

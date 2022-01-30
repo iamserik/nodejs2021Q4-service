@@ -14,7 +14,6 @@
     "noInlineConfig": true
   },
   "extends": [
-    "airbnb-typescript/base",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier"

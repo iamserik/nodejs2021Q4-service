@@ -1,5 +1,5 @@
-/* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
+import { validateId } from "../common/utils";
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
@@ -19,29 +19,36 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   getOne(@Param('id') id: string
   ) {
+    validateId(id);
     return this.usersService.getById(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createUser(@Body()
-               user: CreateUserDto
+  create(@Body()
+               payload: CreateUserDto
   ) {
-    return this.usersService.create(user);
+    if (!payload.name || !payload.login || !payload.password) {
+      throw new HttpException('Name, login and password all required', HttpStatus.BAD_REQUEST);
+    }
+    return this.usersService.create(payload);
   }
 
   @Delete(':id')
-  deleteUser(@Param('id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  delete(@Param('id')
                id: string
   ) {
+    validateId(id);
     return this.usersService.delete(id);
   }
 
   @Put(':id')
-  updateUser(@Body()
-               user: UpdateUserDto, @Param('id')
+  update(@Body()
+               payload: UpdateUserDto, @Param('id')
                id: string
   ) {
-    return `User ${user.name} with password ${user.password} id ${id}`;
+    validateId(id);
+    return this.usersService.update(id, payload);
   }
 }
