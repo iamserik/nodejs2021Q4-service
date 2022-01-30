@@ -18,7 +18,7 @@ export class Board extends Base {
   @OneToMany(
     () => BoardColumn,
     (column: BoardColumn) => column.board,
-    { cascade: true },
+    { cascade: true, eager: true },
   )
   columns: BoardColumn;
 }
