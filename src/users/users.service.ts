@@ -31,7 +31,7 @@ export class UsersService {
     try {
       const user = await this.usersRepository.create(payload);
       await user.save();
-      return user;
+      return await this.usersRepository.findOne(user.id);
     } catch(error) {
       if (error instanceof Error) {
         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

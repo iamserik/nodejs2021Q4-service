@@ -18,13 +18,12 @@ type TBoard = {
 
 @Injectable()
 export class BoardsService {
-  private boards = [];
   constructor(@InjectRepository(Board) private boardsRepository: Repository<Board>) {
   }
-  async getAll(): Promise<TBoard[]> {
+  async getAll(): Promise<Board[]> {
     const boards = await this.boardsRepository.find();
 
-    return boards.map((board) => ({ ...board, columns }));
+    return boards;
   }
 
   async getById(id: string): Promise<TBoard> {
