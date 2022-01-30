@@ -1,36 +1,31 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 import { Task } from "../entity/tasks.entity";
 import { Board } from "../entity/boards.entity";
 import { User } from "../entity/users.entity";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { UpdateTaskDto } from "./dto/update-task.dto";
-
-interface ITask extends CreateTaskDto {
-  id: string;
-}
+import { BoardColumn } from "../entity/columns.entity";
 
 @Injectable()
 export class TasksService {
   constructor(@InjectRepository(Task) private tasksRepository: Repository<Task>) {
   }
 
-  async getAll(boardId: string): Promise<CreateTaskDto[]> {
+  async getAll(boardId: string): Promise<Task[]> {
     const tasks = await this.tasksRepository.find({ where: [{ board: boardId }], loadRelationIds: true });
-    const mapped = tasks.map((task) => {
-      return { ...task, userId: task.user && task.user.toString(), boardId: task.board && task.board.toString(), columnId: null };
-    })
-    return mapped;
+
+    return tasks;
   }
 
-  async getById(id: string): Promise<CreateTaskDto> {
-    const task = await Task.findOne(id, {
+  async getById(id: string): Promise<Task> {
+    const task = await this.tasksRepository.findOne(id, {
       loadRelationIds: true,
     });
 
     if (task) {
-      return { ...task, userId: task.user && task.user.toString(), boardId: task.board && task.board.toString(), columnId: null };;
+      return task;
     } else {
       throw new HttpException(
         `Task with id ${id} not found`,
@@ -39,28 +34,28 @@ export class TasksService {
     }
   }
 
-  async create(payload: CreateTaskDto): Promise<CreateTaskDto> {
-    const {title, description, order, boardId, userId} = payload;
+  async create(payload: CreateTaskDto): Promise<Task> {
+    const {title, description, order, boardId, userId, columnId} = payload;
 
-    const board = await Board.findOne(boardId);
+    const board = await getRepository(Board).findOne(boardId);
+
+    if (!board) {
+      throw new HttpException('Board does not exists', HttpStatus.BAD_REQUEST);
+    }
 
     try {
-      const task = await Task.create({
+      const task = await this.tasksRepository.create({
         title,
         description,
         order,
-        ...userId && { user: await User.findOne(userId) },
+        ...userId && { user: await getRepository(User).findOne(userId) },
         board,
+        ...columnId && { column: await getRepository(BoardColumn).findOne(columnId) },
       });
 
       await task.save();
 
-      return {
-        ...task,
-        columnId: null,
-        userId: userId && task.user.id,
-        boardId: task.board && task.board.id,
-      };
+      return await this.getById(task.id);
     } catch(err) {
       if (err instanceof Error) {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
@@ -76,21 +71,20 @@ export class TasksService {
   }
 
   async update(id: string, payload: UpdateTaskDto): Promise<Task> {
-    const { title, description, order, boardId, userId } = payload;
+    const { title, description, order, boardId, userId, columnId } = payload;
 
-    const board = await Board.findOne(boardId);
+    const board = await getRepository(Board).findOne(boardId);
 
-    await Task.update(id, {
+    const task = await Task.update(id, {
       title,
       description,
       order,
-      ...userId && { user: await User.findOne(userId) },
+      ...userId && { user: await getRepository(User).findOne(userId) },
       board,
+      ...columnId && { column: await getRepository(BoardColumn).findOne(columnId) }
     });
 
-    const task = await Task.findOne(id);
-
-    if (task) return task;
+    if (task) return await this.getById(id);
     else throw new HttpException(`Task with id ${id} not found`, HttpStatus.BAD_REQUEST);
   }
 }

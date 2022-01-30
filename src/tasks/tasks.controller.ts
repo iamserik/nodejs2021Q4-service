@@ -3,21 +3,21 @@ import { validateId } from "../common/utils";
 import { TasksService } from "./tasks.service";
 import { CreateTaskDto } from "./dto/create-task.dto";
 
-@Controller('tasks')
+@Controller('boards/:boardId/tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getAll(@Param() boardId: string) {
+  getAll(@Param('boardId') boardId: string) {
     validateId(boardId);
     return this.tasksService.getAll(boardId);
   }
 
-  @Get(':id')
+  @Get(':taskId')
   @HttpCode(HttpStatus.OK)
-  getOne(@Param() taskId: string
+  getOne(@Param('taskId') taskId: string
   ) {
     validateId(taskId);
     return this.tasksService.getById(taskId);
@@ -26,7 +26,7 @@ export class TasksController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body()
-           payload: CreateTaskDto, @Param() boardId: string
+           payload: CreateTaskDto, @Param('boardId') boardId: string
   ) {
     validateId(boardId);
     return this.tasksService.create({ ...payload, boardId });

@@ -2,6 +2,7 @@ import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Base } from './BaseEntity';
 import { User} from './users.entity';
 import { Board } from './boards.entity';
+import { BoardColumn } from "./columns.entity";
 
 @Entity('tasks')
 export class Task extends Base {
@@ -29,4 +30,12 @@ export class Task extends Base {
   )
   @JoinColumn({ name: 'boardId' })
   board: Board;
+
+  @ManyToOne(
+    () => BoardColumn,
+    (column: BoardColumn) => column.tasks,
+    { nullable: true, onDelete: 'SET NULL' },
+  )
+  @JoinColumn({ name: 'columnId' })
+  column: BoardColumn;
 }
