@@ -15,7 +15,7 @@ export class User extends Base {
 
   @OneToMany(
     () => Task,
-    (task: Task) => task.user,
+    (task: Task) => task.userId,
   )
   tasks: Task;
 }

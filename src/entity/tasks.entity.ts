@@ -21,7 +21,7 @@ export class Task extends Base {
     { nullable: true, onDelete: 'SET NULL' },
   )
   @JoinColumn({ name: 'userId'})
-  user: User;
+  userId: User;
 
   @ManyToOne(
     () => Board,
@@ -29,7 +29,7 @@ export class Task extends Base {
     { onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'boardId' })
-  board: Board;
+  boardId: Board;
 
   @ManyToOne(
     () => BoardColumn,
@@ -37,5 +37,5 @@ export class Task extends Base {
     { nullable: true, onDelete: 'SET NULL' },
   )
   @JoinColumn({ name: 'columnId' })
-  column: BoardColumn;
+  columnId: BoardColumn;
 }

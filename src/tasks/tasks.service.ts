@@ -14,7 +14,7 @@ export class TasksService {
   }
 
   async getAll(boardId: string): Promise<Task[]> {
-    const tasks = await this.tasksRepository.find({ where: [{ board: boardId }], loadRelationIds: true });
+    const tasks = await this.tasksRepository.find({ where: [{ boardId: boardId }], loadRelationIds: true });
 
     return tasks;
   }
@@ -48,9 +48,9 @@ export class TasksService {
         title,
         description,
         order,
-        ...userId && { user: await getRepository(User).findOne(userId) },
-        board,
-        ...columnId && { column: await getRepository(BoardColumn).findOne(columnId) },
+        ...userId && { userId: await getRepository(User).findOne(userId) },
+        boardId: board,
+        ...columnId && { columnId: await getRepository(BoardColumn).findOne(columnId) },
       });
 
       await task.save();
@@ -79,9 +79,9 @@ export class TasksService {
       title,
       description,
       order,
-      ...userId && { user: await getRepository(User).findOne(userId) },
-      board,
-      ...columnId && { column: await getRepository(BoardColumn).findOne(columnId) }
+      ...userId && { userId: await getRepository(User).findOne(userId) },
+      boardId: board,
+      ...columnId && { columnId: await getRepository(BoardColumn).findOne(columnId) }
     });
 
     if (task) return await this.getById(id);

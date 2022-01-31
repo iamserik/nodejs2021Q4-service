@@ -22,7 +22,7 @@ export class BoardColumn {
 
   @OneToMany(
     () => Task,
-    (task: Task) => task.column,
+    (task: Task) => task.columnId,
     { cascade: true }
   )
   tasks: BoardColumn

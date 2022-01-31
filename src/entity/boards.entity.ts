@@ -10,7 +10,7 @@ export class Board extends Base {
 
   @OneToMany(
     () => Task,
-    (task: Task) => task.board,
+    (task: Task) => task.boardId,
     { cascade: true },
   )
   tasks: Task;
