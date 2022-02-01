@@ -5,9 +5,10 @@ import { BoardsModule } from './boards/boards.module';
 import { TasksModule } from './tasks/tasks.module';
 import { ColumnsModule } from './columns/columns.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UsersModule, BoardsModule, TypeOrmModule.forRoot(), TasksModule, ColumnsModule],
+  imports: [UsersModule, BoardsModule, TypeOrmModule.forRoot(), TasksModule, ColumnsModule, AuthModule],
   controllers: [],
   providers: [],
 })

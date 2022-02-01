@@ -27,6 +27,16 @@ export class UsersService {
     }
   }
 
+  async getByLogin(login: string): Promise<User> {
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .select(['user.id', 'user.password', 'user.login'])
+      .where('user.login = :login', { login })
+      .getOne();
+
+    return user;
+  }
+
   async create(payload: CreateUserDto) {
     try {
       const user = await this.usersRepository.create(payload);
