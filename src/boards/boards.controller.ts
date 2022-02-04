@@ -16,6 +16,7 @@ export class BoardsController {
     return this.boardService.getAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   getOne(@Param('id') id: string
@@ -23,6 +24,7 @@ export class BoardsController {
     return this.boardService.getById(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body()
@@ -31,6 +33,7 @@ export class BoardsController {
     return this.boardService.create(board);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   delete(@Param('id')
                id: string
@@ -38,6 +41,7 @@ export class BoardsController {
     return this.boardService.delete(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(@Body()
                board: UpdateBoardDto, @Param('id')

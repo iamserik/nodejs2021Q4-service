@@ -6,17 +6,6 @@ import { UpdateBoardDto } from "./dto/update-board.dto";
 import { Board } from "../entity/boards.entity";
 import { BoardColumn } from "../entity/columns.entity";
 
-const columns = [
-  { title: 'Backlog', order: 1 },
-  { title: 'Sprint', order: 2 },
-]
-
-type TBoard = {
-  id: string;
-  title: string;
-  columns: Record<string, string | number>[];
-}
-
 @Injectable()
 export class BoardsService {
   constructor(@InjectRepository(Board) private boardsRepository: Repository<Board>) {
