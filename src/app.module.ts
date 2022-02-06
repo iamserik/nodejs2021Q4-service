@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
@@ -22,12 +23,15 @@ import * as path from 'path';
     ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, 'uploads'),
     }),
+    ConfigModule.forRoot(),
   ],
   controllers: [],
   providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    if (process.env.USE_FASTIFY !== 'true') {
+      consumer.apply(LoggerMiddleware).forRoutes('*');
+    }
   }
 }

@@ -6,6 +6,7 @@
   "database": "nodejs_service",
   "synchronize": false,
   "logging": false,
+  "migrationsRun": true,
   "entities": [
     "dist/**/*.entity{.ts,.js}"
   ],

@@ -59,6 +59,11 @@ export class migrations1643556686669 implements MigrationInterface {
             ADD CONSTRAINT "FK_0ecfe75e5bd731e00e634d70e5f" FOREIGN KEY ("columnId") REFERENCES "columns"("id") ON DELETE
             SET NULL ON UPDATE NO ACTION
         `);
+
+        await queryRunner.query(`
+            INSERT INTO "users" (name, login, password)
+                VALUES ('admin', 'admin', '$2a$05$738C5/NmeDFTU14yMjrrneKiOf71Yvc0199VMxvUgFENjI3yWrbuq')
+        `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
