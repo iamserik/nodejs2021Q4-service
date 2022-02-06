@@ -14,7 +14,6 @@
     "noInlineConfig": true
   },
   "extends": [
-    "airbnb-typescript/base",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier"
@@ -28,6 +27,6 @@
     "@typescript-eslint/no-var-requires": "off",
     "import/no-extraneous-dependencies": "off",
     "@typescript-eslint/no-explicit-any": ["error"],
-    "no-console": ["error"]
+    "no-console": ["warn"]
   }
 }
