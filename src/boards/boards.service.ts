@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getRepository, Repository } from "typeorm";
-import { CreateBoardDto } from "./dto/create-board.dto";
-import { UpdateBoardDto } from "./dto/update-board.dto";
-import { Board } from "../entity/boards.entity";
+import { getRepository, Repository } from 'typeorm';
+import { CreateBoardDto } from './dto/create-board.dto';
+import { UpdateBoardDto } from './dto/update-board.dto';
+import { Board } from '../entity/boards.entity';
+import { ColumnsService } from '../columns/columns.service';
 import { BoardColumn } from "../entity/columns.entity";
 
 @Injectable()
@@ -34,7 +35,7 @@ export class BoardsService {
       const board = await this.boardsRepository.create({ title: payload.title });
       await board.save();
       for (const col of payload.columns) {
-        await getRepository(BoardColumn).save({ ...col, board })
+        await getRepository(BoardColumn).save({ ...col, board });
       }
       return await this.getById(board.id);
     } catch (error) {
