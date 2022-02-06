@@ -3,6 +3,7 @@ import { BoardsService } from "./boards.service";
 import { CreateBoardDto } from "./dto/create-board.dto";
 import { UpdateBoardDto } from "./dto/update-board.dto";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { validateId } from "../common/utils";
 
 @Controller('boards')
 export class BoardsController {
@@ -21,6 +22,7 @@ export class BoardsController {
   @HttpCode(HttpStatus.OK)
   getOne(@Param('id') id: string
   ) {
+    validateId(id);
     return this.boardService.getById(id);
   }
 
@@ -38,6 +40,7 @@ export class BoardsController {
   delete(@Param('id')
                id: string
   ) {
+    validateId(id);
     return this.boardService.delete(id);
   }
 
@@ -47,6 +50,7 @@ export class BoardsController {
                board: UpdateBoardDto, @Param('id')
                id: string
   ) {
+    validateId(id);
     return this.boardService.update(id, board);
   }
 }
